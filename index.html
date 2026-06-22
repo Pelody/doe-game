@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Dragons of Etchinstone</title>
+<style>
+  :root{
+    --water:#3b82f6; --fire:#ef4444; --lightning:#eab308; --shadow:#a78bfa;
+    --bg:#0f1220; --panel:#1b2030; --panel2:#252b40; --line:#39405c; --txt:#e7e9f3; --muted:#9aa3c0;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,"PingFang TC","Noto Sans TC",system-ui,sans-serif;font-size:16px;line-height:1.45}
+  #app{max-width:560px;margin:0 auto;padding:10px 10px 90px}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;position:static;margin-bottom:12px}
+  .top b{font-size:18px;line-height:1.15;display:block;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top>div:first-child{flex:1 1 auto;min-width:0}
+  .top-right{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+  .tool-btn{appearance:none;border:1px solid var(--line);background:var(--panel2);color:var(--txt);border-radius:10px;padding:7px 10px;font-size:14px;font-weight:700;min-height:0;flex:0 0 auto;white-space:nowrap;align-self:center}
+  .deckbox{border:1px solid var(--line);background:#0000001f;border-radius:10px;padding:6px 8px;line-height:1.25;text-align:left;min-width:64px;color:var(--txt);font-size:12.5px;white-space:nowrap}
+  .muted{color:var(--muted);font-size:13px}
+  h2{font-size:17px;margin:14px 2px 6px}
+  .banner{background:linear-gradient(90deg,#2a2f4a,#1b2030);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:12px 0}
+  .row{display:flex;flex-wrap:wrap;gap:8px}
+  .card{position:relative;flex:1 1 calc(50% - 8px);min-width:150px;background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:12px;padding:8px 10px}
+  .card.sel{outline:2px solid #6ee7ff;background:var(--panel2)}
+  .card.isback{outline:2px dashed #f59e0baa}
+  .face{display:flex;gap:6px;margin-top:2px}
+  .half{flex:1;min-width:0}
+  .half.flip{transform:rotate(180deg)}
+  .cardname{font-size:16px;font-weight:600;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;margin:1px 1px 3px}
+  .cardname.flip{transform:rotate(180deg);margin:3px 1px 1px}
+  .cardname .cn{overflow:hidden;text-overflow:ellipsis}
+  .lvtag{background:#000a;border-radius:6px;padding:1px 6px;font-size:13px;flex:none}
+  .rolepop{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#0b0e18f2;border:1px solid #fff3;border-radius:9px;padding:3px 10px;font-size:16px;font-weight:700;z-index:4;pointer-events:none;letter-spacing:.3px;white-space:nowrap}
+  .rp-s{color:#22c55e;border-color:#22c55e}
+  .rp-e{color:#60a5fa;border-color:#60a5fa}
+  .rp-b{color:#f59e0b;border-color:#f59e0b}
+  .rp-dmg{color:#fca5a5;border-color:#ef4444}
+  .rp-up{color:#34d399;border-color:#34d399}
+  .rp-warn{color:#fca5a5;border-color:#ef4444}
+  .r{display:flex;align-items:center;gap:5px;font-size:19px;margin:3px 0}
+  .r b{font-weight:700}
+  .card .nm{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px}
+  .chips{display:flex;flex-wrap:wrap;gap:5px 9px;margin-top:6px}
+  .chips.big{gap:9px 14px;font-size:19px}
+  .chip{display:inline-flex;align-items:center;gap:3px;font-size:16px;color:var(--txt)}
+  .chip b{font-weight:700}
+  .tier{display:inline-flex;align-items:center;gap:1px;background:#0006;border-radius:8px;padding:2px 6px}
+  svg{flex:none}
+  .legendbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin:8px 0;font-size:14px}
+  .legendbox summary{cursor:pointer;color:var(--muted)}
+  #legend{margin-top:8px}
+  .card .lv{position:absolute;top:6px;right:8px;font-size:11px;background:#000a;border-radius:8px;padding:1px 6px}
+  .badge{position:absolute;top:6px;left:8px;font-size:11px;font-weight:700;border-radius:8px;padding:1px 7px}
+  .b-s{background:#22c55e;color:#062} .b-e{background:#60a5fa;color:#013} .b-b{background:#f59e0b;color:#310} .b-r{background:#555;color:#ddd} .b-c{background:#ef4444;color:#fff}
+  .w{border-left-color:var(--water)} .f{border-left-color:var(--fire)} .l{border-left-color:var(--lightning)} .s{border-left-color:var(--shadow)}
+  .enc{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:12px 0}
+  .enc .nm{font-weight:700;font-size:17px}
+  .pill{display:inline-block;background:#000a;border-radius:8px;padding:2px 9px;margin:2px 4px 2px 0;font-size:14px}
+  .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  button{appearance:none;border:1px solid var(--line);background:var(--panel2);color:var(--txt);border-radius:12px;padding:12px 14px;font-size:16px;font-weight:600;flex:1 1 auto;min-height:46px}
+  button.primary{background:#3b82f6;border-color:#3b82f6;color:#fff}
+  button.warn{background:#7c3aed;border-color:#7c3aed;color:#fff}
+  button.ghost{background:transparent}
+  button:disabled{opacity:.4}
+  .toggle{display:flex;gap:6px}
+  .toggle button.on{background:#22c55e;border-color:#22c55e;color:#042}
+  .action-toolbar{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+  .action-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .action-controls button{flex:0 0 auto;padding:10px 12px;min-height:42px}
+  .boost-switch{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:12px;padding:4px 5px;background:#00000018;min-height:42px}
+  .boost-switch .bs-label{font-size:13px;font-weight:800;color:var(--muted);padding:0 2px}
+  .boost-switch button{padding:6px 12px;min-height:32px;border-radius:9px;font-size:15px;flex:0 0 auto}
+  .boost-switch button.on{background:#22c55e;border-color:#22c55e;color:#042}
+  .confirm-row{display:flex;gap:8px}
+  .confirm-row button{width:100%;flex:1 1 auto}
+  .elem-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:8px}
+  .elem-row button{padding:10px 6px;min-height:42px;font-size:15px;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
+  .fuse-box{margin-top:2px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:#00000018}
+  .fuse-note{font-size:13px;line-height:1.45;color:var(--muted)}
+  .fuse-now{font-size:13px;line-height:1.45;color:var(--txt);margin-top:6px}
+  .ranged-option{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#00000024;border:1px solid #ffffff12;border-radius:12px;padding:8px 10px;margin:8px 0;font-size:13px}
+  .ranged-option .left{display:flex;align-items:center;gap:6px;min-width:0}
+  .ranged-option button{flex:0 0 auto;min-height:34px;padding:6px 10px;border-radius:9px;font-size:13px}
+  #log{background:#0b0e18;border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:13.5px;color:#cdd3ea;max-height:30vh;overflow:auto;white-space:pre-wrap}
+  .end{text-align:center;padding:24px 10px}
+  .end .big{font-size:30px;margin:8px}
+  .hintbar{display:none}
+
+
+  /* --- UI redesign: current-level cards + info-button 4-level preview --- */
+  .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:stretch}
+  .card{min-width:0;min-height:198px;display:flex;flex-direction:column;gap:6px;padding:8px 9px;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+  .cardname,.cardname.flip,.face,.half,.half.flip{display:none!important}
+  .card-head{display:flex;align-items:center;justify-content:space-between;gap:6px;border-bottom:1px solid #ffffff18;padding-bottom:5px;min-height:30px}
+  .card-title{min-width:0;font-weight:700;font-size:15px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:5px;min-height:22px}.card-title svg{margin-top:0;flex:0 0 auto}.card-title span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:normal;min-width:0}
+  .card-sub{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12px;margin-top:4px;white-space:nowrap;min-height:22px}
+  .level-badge{background:#000a;border:1px solid #ffffff24;border-radius:8px;padding:1px 6px;color:#fff;font-size:12px;font-weight:800;flex:0 0 auto}
+  .info-btn{width:30px;height:30px;min-height:0;flex:0 0 auto;border-radius:999px;padding:0;font-size:16px;line-height:1;background:#0006;border:1px solid #ffffff2a;color:#d8ddf0}
+  .info-btn:active{transform:scale(.96)}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1}
+  .stat-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:#00000024;border:1px solid #ffffff12;border-radius:8px;min-height:54px;padding:5px 3px}
+  .stat-label{display:flex;align-items:center;justify-content:center;gap:4px;font-size:12px;color:var(--muted);line-height:1.05;white-space:nowrap}
+  .stat-value{font-size:22px;font-weight:800;line-height:1.1;margin-top:2px;color:#fff;white-space:nowrap}
+  .stat-value.small{font-size:17px}
+  .enh-row{display:flex;flex-direction:row;align-items:center;justify-content:center;text-align:center;gap:8px;background:#00000030;border:1px solid #ffffff18;border-radius:9px;min-height:50px;padding:6px 8px}
+  .enh-label{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px;white-space:nowrap}
+  .enh-value{font-size:20px;font-weight:800;line-height:1;white-space:nowrap}
+  .rolepop{position:static;transform:none;display:inline-flex;align-items:center;justify-content:center;margin-top:0;align-self:auto;background:#0b0e18d8;border:1px solid #fff3;border-radius:999px;padding:2px 9px;font-size:12px;font-weight:800;letter-spacing:.2px;pointer-events:none;white-space:nowrap}
+  .card-foot{display:none}
+  .card-hint{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right;flex:1}
+
+  .dual-icons{display:inline-flex;align-items:center;gap:0;line-height:0}.dual-icons svg+svg{margin-left:-7px}.stat-label .dual-icons{margin-right:1px}
+  .stat-grid.six{grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,minmax(49px,1fr));gap:6px}.stat-grid.six .stat-cell{min-height:49px}.stat-grid.six .stat-label{font-size:11px}.stat-grid.six .stat-value{font-size:19px}
+  .enh-cell .stat-label span{font-size:11px}.stat-grid.six .enh-cell .stat-label span{font-size:10px}.effect-cell .stat-label span{font-size:10px}.effect-value{font-size:15px;font-weight:800;line-height:1.05;color:#fff;white-space:nowrap}
+  .effects-row{display:flex;align-items:center;flex-wrap:wrap;gap:5px;margin-top:6px}.effect-chip{display:inline-flex;align-items:center;gap:4px;background:#00000030;border:1px solid #ffffff16;border-radius:999px;padding:2px 7px;font-size:12px;line-height:1.2;color:var(--txt);white-space:nowrap}.effect-chip.hardship{background:#3b2359;border-color:#a78bfa55}.effect-chip.enemy-ability{background:#4a241e;border-color:#fb923c55}.effect-chip.journey-peril{background:#1f3b4d;border-color:#67e8f955}.effect-chip svg{flex:0 0 auto}
+  .region-board{margin:12px 0}
+  .rb-title{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-bottom:12px;color:#e7e9f3;padding:0 2px}
+  .rb-title-main{font-size:18px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.2px}
+  .rb-title-sub{font-size:14px;color:#b2bad3;white-space:nowrap;font-weight:700}
+  .rb-enemies{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .rb-journeys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:8px}
+  .rb-card{position:relative;min-width:0;background:#1b2030;border:1px solid #ffffff14;border-radius:14px;padding:7px;overflow:hidden;box-shadow:inset 0 10px 30px #00000018}
+  .rb-card.current{background:rgba(250,204,21,.08);border-color:#facc15b8;box-shadow:0 0 0 2px #facc1540 inset}
+  .rb-current{display:none}
+  .rb-num-pill{display:inline-flex;align-items:center;justify-content:center;gap:3px;background:#00000042;border:1px solid #ffffff16;border-radius:9px;padding:2px 5px;font-size:14px;font-weight:900;line-height:1;min-height:26px;color:#fff;white-space:nowrap}
+  .rb-num-pill svg{flex:0 0 auto}
+  .rb-num-pill.small{font-size:10px;min-height:22px;padding:1px 4px;border-radius:8px;gap:2px}
+  .rb-num-pill.armor{justify-content:flex-start}
+  .rb-enemy{min-height:142px;padding:7px}
+  .rb-enemy-wrap{display:grid;grid-template-columns:42px 1fr;gap:7px;min-height:128px}
+  .rb-side-stats{display:flex;flex-direction:column;gap:4px}
+  .rb-armor-group{display:flex;flex-direction:column;gap:4px}
+  .rb-underfx{display:flex;flex-direction:column;gap:2px;margin-top:1px}
+  .rb-art-panel{display:flex;flex-direction:column;min-width:0;min-height:0}
+  .rb-art-box{position:relative;flex:1;min-height:82px;border-radius:12px;border:1px solid #ffffff14;background:#1a2030;overflow:hidden}
+  .rb-art-box::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02) 44%,rgba(0,0,0,.1));}
+  .rb-art-box .rb-watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:.95}
+  .rb-art-box .rb-watermark svg{filter:drop-shadow(0 6px 18px rgba(0,0,0,.18))}
+  .rb-xp-corner{position:absolute;right:6px;bottom:6px;display:inline-flex;align-items:center;justify-content:center;gap:3px;background:#00000055;border:1px solid #ffffff16;border-radius:9px;padding:2px 6px;font-size:14px;font-weight:900;line-height:1;min-height:26px;color:#fff}
+  .rb-xp-corner.left{left:6px;right:auto}
+  .rb-xp-corner.right{right:6px;left:auto}
+  .rb-journey .rb-xp-corner{font-size:10px;min-height:22px;padding:1px 4px;border-radius:8px;gap:2px}
+  .rb-art-fx-left{position:absolute;left:6px;bottom:6px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;max-width:calc(100% - 56px);z-index:2}
+  .rb-art-fx-right{position:absolute;right:6px;bottom:6px;display:flex;flex-direction:column;align-items:flex-end;gap:3px;max-width:calc(100% - 56px);z-index:2}
+  .rb-art-fx-top-right{position:absolute;top:6px;right:6px;display:flex;flex-direction:column;align-items:flex-end;gap:3px;max-width:calc(100% - 14px);z-index:2}
+  .rb-journey-stats .rb-num-pill{width:100%;justify-content:center}
+
+  .rb-enemy .effect-chip{font-size:8px;padding:1px 5px;gap:3px;max-width:100%}
+  .rb-enemy .effect-chip span{max-width:88px;overflow:hidden;text-overflow:ellipsis}
+  .rb-journey{min-height:156px;padding:6px 6px}
+  .rb-journey-wrap{display:flex;flex-direction:column;min-height:144px;gap:4px}
+  .rb-journey-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+  .rb-journey-art{position:relative;flex:1;min-height:112px;border-radius:11px;border:1px solid #ffffff12;background:#1a2030;overflow:hidden}
+  .rb-journey-art::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02) 46%,rgba(0,0,0,.1));}
+  .rb-journey-art .rb-watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:.9}
+  .rb-peril-top{position:absolute;top:5px;right:5px;display:flex;flex-direction:column;align-items:flex-end;gap:3px;max-width:calc(100% - 10px);z-index:2}
+  .rb-journey-foot{display:none}
+  .rb-xp-bottom{display:inline-flex;align-items:center;gap:2px;background:#00000048;border:1px solid #ffffff14;border-radius:999px;padding:1px 5px;font-size:10px;font-weight:900;color:#fff}
+  .rb-fx-bottom{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:0}
+  .rb-journey .effect-chip{font-size:8px;padding:1px 4px;gap:2px}
+  .rb-journey .effect-chip span{max-width:48px;overflow:hidden;text-overflow:ellipsis}
+  .hand-preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:stretch}
+.legend-section{margin-top:18px;padding-top:2px}.legend-section+.legend-section{margin-top:26px;padding-top:18px;border-top:1px solid #ffffff12}.legend-title{display:block;font-weight:800;color:#e7e9f3;margin:0 0 12px;font-size:18px}.legend-basic-grid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px 8px!important;align-items:stretch}.legend-icon-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:60px;padding:8px 5px;border:1px solid #ffffff12;border-radius:12px;background:rgba(255,255,255,.04);text-align:center;font-size:12px;font-weight:700;color:var(--txt)}.legend-icon-card svg{width:20px;height:20px}.legend-icon-card.wide{grid-column:span 2;min-height:60px;flex-direction:row;justify-content:center;gap:8px}.legend-rule-list{display:flex;flex-direction:column;gap:10px}.legend-rule-item{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:flex-start;padding:11px 12px;border:1px solid #ffffff10;border-radius:14px;background:rgba(255,255,255,.035)}.legend-rule-icon{display:flex;align-items:center;justify-content:center;width:24px;padding-top:2px}.legend-rule-body{min-width:0}.legend-rule-name{font-size:16px;font-weight:800;line-height:1.2;color:#eef2ff}.legend-rule-desc{margin-top:2px;color:var(--muted);font-size:13px;line-height:1.45}.legend-inline-ele{display:flex;align-items:center;justify-content:center;gap:6px}.legend-inline-ele svg{flex:0 0 auto}
+
+  .preview-overlay{position:fixed;inset:0;z-index:50;background:rgba(3,6,14,.72);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:24px 16px}
+  .preview-modal{width:min(520px,100%);max-height:calc(100svh - 48px);overflow:auto;background:#111522f2;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 80px #000c;padding:12px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+  .preview-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 2px 10px;border-bottom:1px solid #ffffff16;margin-bottom:10px}
+  .preview-title{font-size:17px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .preview-close{width:34px;height:34px;min-height:0;padding:0;border-radius:999px;flex:0 0 auto;background:#0006}
+  .preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:8px}
+  .level-card{height:236px;display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:12px;padding:8px;min-width:0}
+  .level-card.current{outline:2px solid #facc15;background:var(--panel2)}
+  .level-title{display:flex;align-items:center;justify-content:space-between;gap:4px;font-weight:800;font-size:15px;border-bottom:1px solid #ffffff16;padding-bottom:5px}
+  .current-tag{font-size:11px;background:#facc15;color:#2a2100;border-radius:999px;padding:1px 7px;font-weight:900}
+  .preview-grid .stat-cell{min-height:42px;padding:3px 2px}
+  .preview-grid .stat-label{font-size:11px}
+  .preview-grid .stat-value{font-size:18px}
+  .preview-grid .stat-value.small{font-size:15px}
+  .preview-grid .enh-row{min-height:44px;padding:4px 6px;gap:6px}
+  .preview-grid .enh-label{font-size:10px}
+  .preview-grid .enh-value{font-size:17px;white-space:normal}
+  .level-note{margin-top:auto;text-align:center;font-size:12px;color:var(--muted);border-top:1px solid #ffffff16;padding-top:4px;min-height:24px}
+  .preview-foot{text-align:center;color:var(--muted);font-size:13px;margin-top:10px;padding-top:8px;border-top:1px solid #ffffff12}
+
+  .action-modal{width:min(520px,100%);max-height:88vh;overflow:auto;background:#111522f4;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 80px #000c;padding:12px}
+  .ap-section{background:#00000024;border:1px solid #ffffff12;border-radius:12px;padding:8px 10px;margin:8px 0}
+  .ap-title{font-size:13px;font-weight:900;color:#e7e9f3;margin-bottom:6px}
+  .ap-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0;border-top:1px solid #ffffff0e;font-size:14px}
+  .ap-row:first-of-type{border-top:0}.ap-row .left{display:flex;align-items:center;gap:6px;min-width:0}.ap-row .mid{color:var(--muted);font-size:12px;flex:1;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ap-row b{font-size:18px;white-space:nowrap}.ap-result{font-size:18px;font-weight:900}.ap-effects{display:flex;flex-direction:column;gap:4px}.ap-effect{font-size:12px;color:#cdd3ea;background:#00000020;border:1px solid #ffffff10;border-radius:8px;padding:5px 7px;line-height:1.35}.ap-buttons{display:flex;gap:8px;margin-top:10px}.ap-buttons button{flex:1}
+
+
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top">
+    <div style="min-width:0;flex:1"><b>Dragons of Etchinstone</b><div class="muted" id="sub">準備中…</div></div>
+    <div class="top-right">
+      <button class="tool-btn" type="button" onclick="toggleLegend()">說明</button>
+      <div class="deckbox" id="deckinfo"></div>
+    </div>
+  </div>
+  <div id="main"></div>
+  <h2>紀錄</h2>
+  <div id="log"></div>
+</div>
+
+
+<script>
+window.DOE_REAL = {"mageCards": [{"name": "Rain of Blood", "cardElement": "lightning", "level": 2, "levels": {"1": {"upgradeCost": 1, "initiative": 2, "boost": 1, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "attack", "value": 6, "element": "fire"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 3, "hardship": "hazards"}, "2": {"upgradeCost": 3, "initiative": 3, "boost": 1, "basic": {"type": "attack", "value": 5}, "enhanced": {"type": "attack", "value": 8, "element": "fire"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "none"}, "3": {"upgradeCost": 4, "initiative": 3, "boost": 2, "basic": {"type": "attack", "value": 6}, "enhanced": {"type": "attack", "value": 11, "element": "fire"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 4, "boost": 3, "basic": {"type": "attack", "value": 7}, "enhanced": {"type": "attack", "value": 14, "element": "fire"}, "armorValue": 5, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}}}, {"name": "Fleet Footed", "cardElement": "lightning", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 5, "boost": 1, "basic": {"type": "move", "value": 3}, "enhanced": {"type": "move", "value": 5, "element": "lightning"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 4, "hardship": "none"}, "2": {"upgradeCost": 4, "initiative": 5, "boost": 2, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "move", "value": 9, "element": "lightning"}, "armorValue": 3, "armorElement": null, "encounterIcon": "journey", "encounterValue": 3, "hardship": "night_travel"}, "3": {"upgradeCost": 6, "initiative": 6, "boost": 4, "basic": {"type": "move", "value": 6}, "enhanced": {"type": "move", "value": 11, "element": "lightning"}, "armorValue": 3, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 4, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 7, "boost": 5, "basic": {"type": "move", "value": 8}, "enhanced": {"type": "move", "value": 14, "element": "lightning"}, "armorValue": 4, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 2, "hardship": "none"}}}, {"name": "Adapt", "cardElement": "lightning", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 2, "boost": 2, "basic": {"type": "attack/move", "value": 2}, "enhanced": {"type": "attack/move", "value": 3, "element": "shadow"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 3, "hardship": "none"}, "2": {"upgradeCost": 3, "initiative": 3, "boost": 3, "basic": {"type": "attack/move", "value": 3}, "enhanced": {"type": "attack/move", "value": 5, "element": "shadow"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}, "3": {"upgradeCost": 4, "initiative": 4, "boost": 4, "basic": {"type": "attack/move", "value": 4}, "enhanced": {"type": "attack/move", "value": 7, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 4, "boost": 5, "basic": {"type": "attack/move", "value": 6}, "enhanced": {"type": "attack/move", "value": 9, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "hazards"}}}, {"name": "River Swiftness", "cardElement": "lightning", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 5, "boost": 1, "basic": {"type": "move", "value": 2}, "enhanced": {"type": "move", "value": 4, "element": "water"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 4, "hardship": "none"}, "2": {"upgradeCost": 4, "initiative": 6, "boost": 2, "basic": {"type": "move", "value": 3}, "enhanced": {"type": "move", "value": 6, "element": "water"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}, "3": {"upgradeCost": 5, "initiative": 8, "boost": 3, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "move", "value": 9, "element": "water"}, "armorValue": 5, "armorElement": null, "encounterIcon": "journey", "encounterValue": 2, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 9, "boost": 5, "basic": {"type": "move", "value": 8}, "enhanced": {"type": "move", "value": 12, "element": "water"}, "armorValue": 5, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 4, "hardship": "storm"}}}, {"name": "Burning Bridges", "cardElement": "fire", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 1, "boost": 1, "basic": {"type": "move", "value": 2}, "enhanced": {"type": "move", "value": 4, "element": "fire"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "hazards"}, "2": {"upgradeCost": 4, "initiative": 1, "boost": 2, "basic": {"type": "move", "value": 3}, "enhanced": {"type": "move", "value": 5, "element": "fire"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "none"}, "3": {"upgradeCost": 5, "initiative": 4, "boost": 2, "basic": {"type": "move", "value": 4}, "enhanced": {"type": "move", "value": 7, "element": "fire"}, "armorValue": 2, "armorElement": "fire", "encounterIcon": "enemy", "encounterValue": 3, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 3, "boost": 3, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "move", "value": 9, "element": "fire"}, "armorValue": 3, "armorElement": "fire", "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}}}, {"name": "Motivated Flight", "cardElement": "fire", "level": 2, "levels": {"1": {"upgradeCost": 1, "initiative": 4, "boost": 1, "basic": {"type": "move", "value": 2}, "enhanced": {"type": "move", "value": 4, "element": "lightning"}, "armorValue": 2, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 3, "hardship": "none"}, "2": {"upgradeCost": 3, "initiative": 5, "boost": 2, "basic": {"type": "move", "value": 4}, "enhanced": {"type": "move", "value": 8, "element": "lightning"}, "armorValue": 2, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 3, "hardship": "none"}, "3": {"upgradeCost": 4, "initiative": 7, "boost": 3, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "move", "value": 10, "element": "lightning"}, "armorValue": 3, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 4, "hardship": "night_travel"}, "4": {"upgradeCost": 0, "initiative": 9, "boost": 5, "basic": {"type": "move", "value": 6}, "enhanced": {"type": "move", "value": 12, "element": "lightning"}, "armorValue": 5, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}}}, {"name": "Adapt", "cardElement": "fire", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 2, "boost": 2, "basic": {"type": "attack/move", "value": 2}, "enhanced": {"type": "attack/move", "value": 3, "element": "shadow"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "ambush"}, "2": {"upgradeCost": 3, "initiative": 3, "boost": 3, "basic": {"type": "attack/move", "value": 3}, "enhanced": {"type": "attack/move", "value": 5, "element": "shadow"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 3, "hardship": "none"}, "3": {"upgradeCost": 4, "initiative": 4, "boost": 4, "basic": {"type": "attack/move", "value": 4}, "enhanced": {"type": "attack/move", "value": 7, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 4, "boost": 5, "basic": {"type": "attack/move", "value": 6}, "enhanced": {"type": "attack/move", "value": 9, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "none"}}}, {"name": "Ice Wall", "cardElement": "fire", "level": 2, "levels": {"1": {"upgradeCost": 1, "initiative": 4, "boost": 1, "basic": {"type": "attack", "value": 2}, "enhanced": {"type": "attack", "value": 3, "element": "water"}, "armorValue": 2, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 3, "hardship": "storm"}, "2": {"upgradeCost": 3, "initiative": 5, "boost": 2, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "attack", "value": 5, "element": "water"}, "armorValue": 2, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 2, "hardship": "storm"}, "3": {"upgradeCost": 4, "initiative": 6, "boost": 4, "basic": {"type": "attack", "value": 4}, "enhanced": {"type": "attack", "value": 7, "element": "water"}, "armorValue": 4, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 2, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 7, "boost": 5, "basic": {"type": "attack", "value": 6}, "enhanced": {"type": "attack", "value": 10, "element": "water"}, "armorValue": 6, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 3, "hardship": "none"}}}, {"name": "Destruction", "cardElement": "water", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 1, "boost": 1, "basic": {"type": "attack", "value": 2}, "enhanced": {"type": "attack", "value": 6, "element": "fire"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "hazards"}, "2": {"upgradeCost": 4, "initiative": 1, "boost": 2, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "attack", "value": 8, "element": "fire"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "none"}, "3": {"upgradeCost": 5, "initiative": 2, "boost": 2, "basic": {"type": "attack", "value": 5}, "enhanced": {"type": "attack", "value": 10, "element": "fire"}, "armorValue": 2, "armorElement": "fire", "encounterIcon": "enemy", "encounterValue": 3, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 3, "boost": 3, "basic": {"type": "attack", "value": 6}, "enhanced": {"type": "attack", "value": 13, "element": "fire"}, "armorValue": 3, "armorElement": "fire", "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}}}, {"name": "Sword of Light", "cardElement": "water", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 4, "boost": 2, "basic": {"type": "attack", "value": 2}, "enhanced": {"type": "attack", "value": 4, "element": "lightning"}, "armorValue": 1, "armorElement": null, "encounterIcon": "journey", "encounterValue": 2, "hardship": "none"}, "2": {"upgradeCost": 3, "initiative": 6, "boost": 2, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "attack", "value": 9, "element": "lightning"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 1, "hardship": "night_travel"}, "3": {"upgradeCost": 4, "initiative": 8, "boost": 3, "basic": {"type": "attack", "value": 4}, "enhanced": {"type": "attack", "value": 7, "element": "lightning"}, "armorValue": 3, "armorElement": null, "encounterIcon": "journey", "encounterValue": 3, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 10, "boost": 4, "basic": {"type": "attack", "value": 6}, "enhanced": {"type": "attack", "value": 10, "element": "lightning"}, "armorValue": 4, "armorElement": null, "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}}}, {"name": "Brute Force", "cardElement": "water", "level": 2, "levels": {"1": {"upgradeCost": 1, "initiative": 1, "boost": 2, "basic": {"type": "move", "value": 2}, "enhanced": {"type": "attack", "value": 4, "element": "shadow"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "ambush"}, "2": {"upgradeCost": 3, "initiative": 1, "boost": 3, "basic": {"type": "move", "value": 3}, "enhanced": {"type": "attack", "value": 5, "element": "shadow"}, "armorValue": 1, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 3, "hardship": "none"}, "3": {"upgradeCost": 4, "initiative": 2, "boost": 4, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "attack", "value": 9, "element": "shadow"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 3, "boost": 5, "basic": {"type": "move", "value": 6}, "enhanced": {"type": "attack", "value": 11, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "none"}}}, {"name": "Ice Wall", "cardElement": "water", "level": 2, "levels": {"1": {"upgradeCost": 1, "initiative": 4, "boost": 1, "basic": {"type": "attack", "value": 2}, "enhanced": {"type": "attack", "value": 3, "element": "water"}, "armorValue": 2, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 2, "hardship": "none"}, "2": {"upgradeCost": 3, "initiative": 5, "boost": 2, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "attack", "value": 5, "element": "water"}, "armorValue": 2, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 2, "hardship": "storm"}, "3": {"upgradeCost": 4, "initiative": 6, "boost": 4, "basic": {"type": "attack", "value": 4}, "enhanced": {"type": "attack", "value": 7, "element": "water"}, "armorValue": 4, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 7, "boost": 5, "basic": {"type": "attack", "value": 6}, "enhanced": {"type": "attack", "value": 10, "element": "water"}, "armorValue": 6, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 3, "hardship": "none"}}}, {"name": "Rain of Blood", "cardElement": "shadow", "level": 2, "levels": {"1": {"upgradeCost": 1, "initiative": 2, "boost": 1, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "attack", "value": 6, "element": "fire"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}, "2": {"upgradeCost": 3, "initiative": 3, "boost": 1, "basic": {"type": "attack", "value": 5}, "enhanced": {"type": "attack", "value": 8, "element": "fire"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "none"}, "3": {"upgradeCost": 4, "initiative": 3, "boost": 2, "basic": {"type": "attack", "value": 6}, "enhanced": {"type": "attack", "value": 11, "element": "fire"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "ambush"}, "4": {"upgradeCost": 0, "initiative": 4, "boost": 3, "basic": {"type": "attack", "value": 7}, "enhanced": {"type": "attack", "value": 14, "element": "fire"}, "armorValue": 5, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 1, "hardship": "none"}}}, {"name": "Fleet Footed", "cardElement": "shadow", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 5, "boost": 1, "basic": {"type": "move", "value": 3}, "enhanced": {"type": "move", "value": 5, "element": "lightning"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}, "2": {"upgradeCost": 4, "initiative": 5, "boost": 2, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "move", "value": 9, "element": "lightning"}, "armorValue": 3, "armorElement": null, "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}, "3": {"upgradeCost": 6, "initiative": 6, "boost": 4, "basic": {"type": "move", "value": 6}, "enhanced": {"type": "move", "value": 11, "element": "lightning"}, "armorValue": 3, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}, "4": {"upgradeCost": 0, "initiative": 7, "boost": 5, "basic": {"type": "move", "value": 8}, "enhanced": {"type": "move", "value": 14, "element": "lightning"}, "armorValue": 4, "armorElement": "lightning", "encounterIcon": "journey", "encounterValue": 2, "hardship": "night_travel"}}}, {"name": "Determined March", "cardElement": "shadow", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 2, "boost": 2, "basic": {"type": "attack", "value": 3}, "enhanced": {"type": "move", "value": 5, "element": "shadow"}, "armorValue": 2, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}, "2": {"upgradeCost": 3, "initiative": 3, "boost": 3, "basic": {"type": "attack", "value": 4}, "enhanced": {"type": "move", "value": 7, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 4, "hardship": "none"}, "3": {"upgradeCost": 5, "initiative": 4, "boost": 5, "basic": {"type": "attack", "value": 5}, "enhanced": {"type": "move", "value": 9, "element": "shadow"}, "armorValue": 3, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "ambush"}, "4": {"upgradeCost": 0, "initiative": 5, "boost": 6, "basic": {"type": "attack", "value": 5}, "enhanced": {"type": "move", "value": 12, "element": "shadow"}, "armorValue": 4, "armorElement": null, "encounterIcon": "enemy", "encounterValue": 2, "hardship": "none"}}}, {"name": "River Swiftness", "cardElement": "shadow", "level": 2, "levels": {"1": {"upgradeCost": 2, "initiative": 5, "boost": 1, "basic": {"type": "move", "value": 2}, "enhanced": {"type": "move", "value": 4, "element": "water"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 1, "hardship": "none"}, "2": {"upgradeCost": 4, "initiative": 6, "boost": 2, "basic": {"type": "move", "value": 3}, "enhanced": {"type": "move", "value": 6, "element": "water"}, "armorValue": 2, "armorElement": null, "encounterIcon": "journey", "encounterValue": 2, "hardship": "none"}, "3": {"upgradeCost": 5, "initiative": 8, "boost": 3, "basic": {"type": "move", "value": 5}, "enhanced": {"type": "move", "value": 9, "element": "water"}, "armorValue": 5, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 3, "hardship": "storm"}, "4": {"upgradeCost": 0, "initiative": 9, "boost": 5, "basic": {"type": "move", "value": 8}, "enhanced": {"type": "move", "value": 12, "element": "water"}, "armorValue": 5, "armorElement": "water", "encounterIcon": "journey", "encounterValue": 4, "hardship": "none"}}}], "regions": {"1": {"name": "Jade Mountains", "enemies": [{"name": "Jade Mountains #1", "hp": 7, "initiative": 8, "attack": 1, "attackElement": "lightning", "armor": [{"value": 1, "element": "lightning"}], "xp": 4, "ability": null}, {"name": "Jade Mountains #2", "hp": 11, "initiative": 4, "attack": 2, "attackElement": "fire", "armor": [{"value": 1, "element": "fire"}], "xp": 7, "ability": null}, {"name": "Jade Mountains #3", "hp": 9, "initiative": 6, "attack": 2, "attackElement": "water", "armor": [{"value": 2, "element": "water"}], "xp": 5, "ability": null}, {"name": "Jade Mountains #4", "hp": 13, "initiative": 2, "attack": 3, "attackElement": "shadow", "armor": [{"value": 3, "element": "shadow"}], "xp": 8, "ability": null}], "journeys": [{"name": "Jade Mountains #1", "mp": 12, "mpElement": "lightning", "timePenalty": 2, "xp": 5, "peril": null}, {"name": "Jade Mountains #2", "mp": 8, "mpElement": "water", "timePenalty": 1, "xp": 3, "peril": null}, {"name": "Jade Mountains #3", "mp": 11, "mpElement": "fire", "timePenalty": 2, "xp": 4, "peril": null}, {"name": "Jade Mountains #4", "mp": 10, "mpElement": "shadow", "timePenalty": 1, "xp": 3, "peril": null}]}, "2": {"name": "Living Marshes", "enemies": [{"name": "Living Marshes #1", "hp": 9, "initiative": 6, "attack": 2, "attackElement": "shadow", "armor": [{"value": 1, "element": "shadow"}], "xp": 5, "ability": "ranged"}, {"name": "Living Marshes #2", "hp": 10, "initiative": 8, "attack": 2, "attackElement": "lightning", "armor": [{"value": 1, "element": "lightning"}], "xp": 4, "ability": null}, {"name": "Living Marshes #3", "hp": 15, "initiative": 2, "attack": 4, "attackElement": "fire", "armor": [{"value": 3, "element": "fire"}], "xp": 8, "ability": "slow"}, {"name": "Living Marshes #4", "hp": 13, "initiative": 5, "attack": 3, "attackElement": "water", "armor": [{"value": 2, "element": "water"}], "xp": 7, "ability": "freeze"}], "journeys": [{"name": "Living Marshes #1", "mp": 10, "mpElement": "fire", "timePenalty": 2, "xp": 4, "peril": "treacherous"}, {"name": "Living Marshes #2", "mp": 13, "mpElement": "water", "timePenalty": 2, "xp": 7, "peril": null}, {"name": "Living Marshes #3", "mp": 11, "mpElement": "lightning", "timePenalty": 3, "xp": 5, "peril": null}, {"name": "Living Marshes #4", "mp": 9, "mpElement": "shadow", "timePenalty": 2, "xp": 4, "peril": "steep"}]}, "3": {"name": "Burning Basin", "enemies": [{"name": "Burning Basin #1", "hp": 17, "initiative": 5, "attack": 3, "attackElement": "shadow", "armor": [{"value": 3, "element": "shadow"}], "xp": 9, "ability": null}, {"name": "Burning Basin #2", "hp": 14, "initiative": 4, "attack": 3, "attackElement": "water", "armor": [{"value": 3, "element": "water"}], "xp": 8, "ability": "slow"}, {"name": "Burning Basin #3", "hp": 11, "initiative": 9, "attack": 2, "attackElement": "fire", "armor": [{"value": 2, "element": "fire"}], "xp": 7, "ability": "poison"}, {"name": "Burning Basin #4", "hp": 9, "initiative": 7, "attack": 2, "attackElement": "lightning", "armor": [{"value": 2, "element": "lightning"}], "xp": 5, "ability": "ranged"}], "journeys": [{"name": "Burning Basin #1", "mp": 14, "mpElement": "water", "timePenalty": 2, "xp": 7, "peril": "steep"}, {"name": "Burning Basin #2", "mp": 12, "mpElement": "lightning", "timePenalty": 3, "xp": 6, "peril": null}, {"name": "Burning Basin #3", "mp": 10, "mpElement": "fire", "timePenalty": 3, "xp": 5, "peril": "treacherous"}, {"name": "Burning Basin #4", "mp": 11, "mpElement": "shadow", "timePenalty": 2, "xp": 5, "peril": null}]}, "4": {"name": "Forests of Gath", "enemies": [{"name": "Forests of Gath #1", "hp": 13, "initiative": 6, "attack": 2, "attackElement": "shadow", "armor": [{"value": 3, "element": "shadow"}, {"value": 2, "element": "water"}], "xp": 7, "ability": "poison"}, {"name": "Forests of Gath #2", "hp": 9, "initiative": 10, "attack": 3, "attackElement": "fire", "armor": [{"value": 1, "element": "fire"}], "xp": 5, "ability": "ranged"}, {"name": "Forests of Gath #3", "hp": 14, "initiative": 8, "attack": 4, "attackElement": "lightning", "armor": [{"value": 2, "element": "lightning"}, {"value": 2, "element": "fire"}], "xp": 8, "ability": "freeze"}, {"name": "Forests of Gath #4", "hp": 17, "initiative": 7, "attack": 5, "attackElement": "water", "armor": [{"value": 3, "element": "water"}, {"value": 2, "element": "shadow"}], "xp": 9, "ability": null}], "journeys": [{"name": "Forests of Gath #1", "mp": 14, "mpElement": "water", "timePenalty": 2, "xp": 7, "peril": "treacherous"}, {"name": "Forests of Gath #2", "mp": 13, "mpElement": "shadow", "timePenalty": 3, "xp": 6, "peril": null}, {"name": "Forests of Gath #3", "mp": 12, "mpElement": "fire", "timePenalty": 2, "xp": 5, "peril": null}, {"name": "Forests of Gath #4", "mp": 11, "mpElement": "lightning", "timePenalty": 3, "xp": 5, "peril": "treacherous"}]}}, "dragons": {"Red Dragon": {"name": "Red Dragon", "initiative": 9, "earlyDamage": {"value": 9, "element": "fire"}, "armor": [{"value": 4, "element": "fire"}], "mpTiers": [[20, "fire", 3], [23, "fire", 2], [28, "fire", 1]], "hpTiers": [[22, {"value": 27, "element": "fire"}], [27, {"value": 24, "element": "fire"}], [32, {"value": 15, "element": "fire"}]]}, "Yellow Dragon": {"name": "Yellow Dragon", "initiative": 13, "earlyDamage": {"value": 8, "element": "lightning"}, "armor": [{"value": 4, "element": "lightning"}, {"value": 1, "element": "fire"}], "mpTiers": [[17, "lightning", 4], [21, "lightning", 3], [25, "lightning", 2]], "hpTiers": [[16, {"value": 23, "element": "lightning"}], [21, {"value": 20, "element": "lightning"}], [29, {"value": 13, "element": "lightning"}]]}, "Blue Dragon": {"name": "Blue Dragon", "initiative": 10, "earlyDamage": {"value": 4, "element": "water"}, "armor": [{"value": 5, "element": "water"}, {"value": 3, "element": "lightning"}, {"value": 2, "element": "shadow"}], "mpTiers": [[15, "water", 4], [21, "water", 3], [27, "water", 1]], "hpTiers": [[22, {"value": 26, "element": "water"}], [25, {"value": 20, "element": "water"}], [31, {"value": 11, "element": "water"}]]}, "Gray Dragon": {"name": "Gray Dragon", "initiative": 12, "earlyDamage": {"value": 6, "element": "shadow"}, "armor": [{"value": 4, "element": "shadow"}, {"value": 3, "element": "water"}], "mpTiers": [[19, "shadow", 3], [23, "shadow", 2], [29, "shadow", 1]], "hpTiers": [[21, {"value": 26, "element": "shadow"}], [26, {"value": 20, "element": "shadow"}], [30, {"value": 12, "element": "shadow"}]]}}};
+
+</script>
+<script>
+/* Dragons of Etchinstone — 規則引擎（JS 移植自 prototype.py / doe_data.py）
+   可在瀏覽器與 node 使用。狀態機式 WebGame 供 UI 逐步操作。 */
+(function (root) {
+  "use strict";
+
+  // ---------- 種子亂數 (mulberry32) ----------
+  function mulberry32(seed) {
+    let a = seed >>> 0;
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function shuffle(arr, rnd) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+  const ceilHalf = (x) => Math.floor((x + 1) / 2);
+
+  // ---------- 工具 ----------
+  function elementOf(set) {
+    if (set.fusedElement) return set.fusedElement;
+    return set.element ? set.element.cardElement : null;
+  }
+  function curLevel(card) { return card.levels[card.level]; }
+  function pickAction(spell, elem) {
+    const enh = curLevel(spell).enhanced;
+    if (elem != null && enh.element != null && elem === enh.element)
+      return [enh, "enhanced"];
+    return [curLevel(spell).basic, "basic"];
+  }
+  function actionSupports(action, kind) {
+    const t = action.type;
+    return t === kind || t === "both" || t === "attack/move" || t === "move/attack";
+  }
+  function actionValue(action, kind) {
+    return actionSupports(action, kind) ? action.value : 1;
+  }
+  function boostValue(set, init, hardships) {
+    let b = set.boost ? curLevel(set.boost).boost : 0;
+    if (hardships.includes("night_travel")) b = Math.max(0, b - init);
+    return b;
+  }
+  function cleanEffects(list) {
+    return (list || []).filter(x => x && x !== "none");
+  }
+  function effName(e) {
+    const M = {
+      night_travel: "Night Travel",
+      hazards: "Hazards",
+      storm: "Storm",
+      ambush: "Ambush",
+      ranged: "Ranged",
+      slow: "Slow",
+      freeze: "Freeze",
+      poison: "Poison",
+      steep: "Steep",
+      treacherous: "Treacherous"
+    };
+    return M[e] || String(e);
+  }
+  function effDesc(e) {
+    const M = {
+      night_travel: "Boost 會先扣除 Initiative，最低為 0",
+      hazards: "Early / Combat Damage 會增加時間懲罰",
+      storm: "若承受時間懲罰，會額外承受等量傷害",
+      ambush: "Early Damage 會加倍",
+      ranged: "即使先攻足夠仍會造成 Early Damage，可棄預備卡忽略",
+      slow: "可用 Move 取代 Attack 與 HP 比較",
+      freeze: "若受到 Early Damage，清理階段須棄預備卡",
+      poison: "若受到傷害，下一手牌追加傷害",
+      steep: "MP 會增加預備卡 Boost",
+      treacherous: "未完全勝利時，時間懲罰後再受 1 傷害"
+    };
+    return M[e] || "特殊效果";
+  }
+  function logEffects(log, label, list) {
+    cleanEffects(list).forEach(e => log.push(`${label}：${effName(e)}｜${effDesc(e)}`));
+  }
+
+  // ---------- 結算：敵人 ----------
+  function resolveEnemy(set, enemy, hardships, opts) {
+    hardships = cleanEffects(hardships); opts = opts || {};
+    const log = [];
+    logEffects(log, "玩家卡苦難啟用", hardships);
+    if (enemy.ability) logEffects(log, "敵人能力啟用", [enemy.ability]);
+
+    let init = set.element ? curLevel(set.element).initiative : 0;
+    const rawBoost = set.boost ? curLevel(set.boost).boost : 0;
+    const b = boostValue(set, init, hardships);
+    if (hardships.includes("night_travel")) {
+      log.push(`Night Travel 觸發：Boost ${rawBoost} - Initiative ${init} → ${b}`);
+    }
+    const elem = elementOf(set);
+    const [action, used] = pickAction(set.spell, elem);
+
+    if (used === "enhanced") {
+      log.push(`強化觸發：Element ${elem} 匹配 ${set.spell.name} 的 Enhanced Element`);
+    } else if (elem) {
+      log.push(`強化未觸發：Element ${elem} 未匹配 ${set.spell.name} 的 Enhanced Element ${curLevel(set.spell).enhanced.element}`);
+    } else {
+      log.push("強化未觸發：未指定 Element");
+    }
+
+    let atk = actionValue(action, "attack");
+    let move = actionValue(action, "move");
+    const isEnhAttack = (used === "enhanced" && actionSupports(action, "attack"));
+    const atkElem = isEnhAttack ? curLevel(set.spell).enhanced.element : null;
+
+    if (set.boostTarget === "initiative") { init += b; log.push(`Boost 指向 Initiative：+${b}`); }
+    else if (set.boostTarget === "move") { move += b; log.push(`Boost 指向 Move：+${b}`); }
+    else { atk += b; log.push(`Boost 指向 Attack：+${b}`); }
+    log.push(`先攻=${init}，攻擊=${atk}${isEnhAttack ? `（強化${atkElem}）` : `（${used}）`}`);
+
+    if (isEnhAttack) {
+      const armors = enemy.armor || (enemy.armorElement != null ? [{ value: enemy.armorValue, element: enemy.armorElement }] : []);
+      let matchedArmor = false;
+      for (const ar of armors) {
+        if (ar.element && ar.element === atkElem) {
+          matchedArmor = true;
+          atk = Math.max(0, atk - ar.value);
+          log.push(`敵人護甲觸發：強化攻擊 ${atkElem} 匹配護甲 ${ar.element}${ar.value} → 攻擊扣為 ${atk}`);
+          break;
+        }
+      }
+      if (!matchedArmor && armors.length) log.push(`敵人護甲未觸發：強化攻擊元素 ${atkElem} 沒有匹配護甲`);
+    }
+
+    let cmp = atk;
+    if (enemy.ability === "slow") {
+      const useMove = (opts.slowUseMove != null) ? opts.slowUseMove : (move > atk);
+      if (useMove) { cmp = move; log.push(`Slow 觸發：改用移動 ${move} 比 HP`); }
+      else log.push(`Slow 未使用：仍用攻擊 ${atk} 比 HP`);
+    }
+
+    let early = 0, discardReserve = false;
+    const ranged = enemy.ability === "ranged";
+    const safe = init >= enemy.initiative;
+    if (ranged && safe && opts.negateRanged) {
+      discardReserve = true; log.push("Ranged 觸發：棄預備卡無視早期傷害");
+    } else if (!safe || ranged) {
+      early = enemy.attack;
+      let why = (ranged && safe) ? "Ranged" : "敵人先攻較高";
+      if (ranged && safe) log.push("Ranged 觸發：即使先攻足夠仍會造成 Early Damage");
+      if (hardships.includes("ambush")) {
+        const before = early;
+        early *= 2;
+        why += "+Ambush翻倍";
+        log.push(`Ambush 觸發：Early Damage ${before} × 2 → ${early}`);
+      }
+      log.push(`早期傷害 ${early}（${why}）`);
+    } else {
+      log.push(`早期傷害未觸發：玩家先攻 ${init} >= 敵人先攻 ${enemy.initiative}`);
+    }
+
+    let outcome, xp, combat;
+    if (cmp >= enemy.hp) { outcome = "完全勝利"; xp = enemy.xp; combat = 0; }
+    else if (cmp >= ceilHalf(enemy.hp)) { outcome = "險勝"; xp = enemy.xp; combat = enemy.attack; }
+    else { outcome = "失敗"; xp = 0; combat = enemy.attack; }
+    log.push(`值 ${cmp} vs HP ${enemy.hp}（門檻 ${ceilHalf(enemy.hp)}）→ ${outcome}`);
+
+    if (enemy.ability === "freeze") {
+      if (early > 0) { discardReserve = true; log.push("Freeze 觸發：受到 Early Damage，清理階段須棄預備卡"); }
+      else log.push("Freeze 未觸發：沒有 Early Damage");
+    }
+
+    let tp = 0;
+    if (hardships.includes("hazards")) {
+      tp = (early > 0 ? 1 : 0) + (combat > 0 ? 1 : 0);
+      if (tp) log.push(`Hazards 觸發：Early Damage=${early > 0 ? 1 : 0}，Combat Damage=${combat > 0 ? 1 : 0} → +${tp} 時間懲罰`);
+      else log.push("Hazards 未觸發：本次沒有 Early / Combat Damage");
+    }
+    let poison = 0;
+    if (enemy.ability === "poison") {
+      if (early > 0 || combat > 0) {
+        poison = (early > 0 && combat > 0) ? 2 : 1;
+        log.push(`Poison 觸發：本次有傷害 → 下一手牌追加 ${poison} 傷害`);
+      } else log.push("Poison 未觸發：本次沒有傷害");
+    }
+    return { outcome, xp, timePenalty: tp, damageEarly: early, damageCombat: combat,
+      attackElement: enemy.attackElement, discardReserve, poison, log };
+  }
+
+  // ---------- 結算：旅程 ----------
+  function resolveJourney(set, journey, hardships, opts) {
+    hardships = cleanEffects(hardships); opts = opts || {};
+    const log = [];
+    logEffects(log, "玩家卡苦難啟用", hardships);
+    if (journey.peril) logEffects(log, "旅程危險啟用", [journey.peril]);
+
+    let init = set.element ? curLevel(set.element).initiative : 0;
+    const rawBoost = set.boost ? curLevel(set.boost).boost : 0;
+    const b = boostValue(set, init, hardships);
+    if (hardships.includes("night_travel")) {
+      log.push(`Night Travel 觸發：Boost ${rawBoost} - Initiative ${init} → ${b}`);
+    }
+    const elem = elementOf(set);
+    const [action, used] = pickAction(set.spell, elem);
+
+    if (used === "enhanced") {
+      log.push(`強化觸發：Element ${elem} 匹配 ${set.spell.name} 的 Enhanced Element`);
+    } else if (elem) {
+      log.push(`強化未觸發：Element ${elem} 未匹配 ${set.spell.name} 的 Enhanced Element ${curLevel(set.spell).enhanced.element}`);
+    } else {
+      log.push("強化未觸發：未指定 Element");
+    }
+
+    let mv = actionValue(action, "move") + b;
+    const isEnhMove = (used === "enhanced" && actionSupports(action, "move"));
+    const reserveBoost = opts.reserve ? curLevel(opts.reserve).boost : 0;
+    if (isEnhMove && curLevel(set.spell).enhanced.element === journey.mpElement && reserveBoost) {
+      mv += reserveBoost; log.push(`Reserve Boost 觸發：強化移動元素 ${curLevel(set.spell).enhanced.element} 匹配 MP ${journey.mpElement} → +${reserveBoost}`);
+    } else if (isEnhMove && curLevel(set.spell).enhanced.element === journey.mpElement) {
+      log.push("Reserve Boost 未觸發：元素匹配但沒有預備卡 Boost");
+    }
+    let mp = journey.mp;
+    if (journey.peril === "steep") {
+      if (reserveBoost) { mp += reserveBoost; log.push(`Steep 觸發：MP + 預備 Boost ${reserveBoost} → ${mp}`); }
+      else log.push("Steep 未觸發加值：沒有預備卡 Boost，MP 不增加");
+    }
+
+    log.push(`移動 ${mv} vs MP ${mp}（門檻 ${ceilHalf(mp)}）`);
+    let outcome, xp, tp;
+    if (mv >= mp) { outcome = "完全勝利"; xp = journey.xp; tp = 0; }
+    else if (mv >= ceilHalf(mp)) { outcome = "險勝"; xp = journey.xp; tp = journey.timePenalty; }
+    else { outcome = "失敗"; xp = 0; tp = journey.timePenalty; }
+    log.push(`→ ${outcome}`);
+    let dmg = 0;
+    if (journey.peril === "treacherous") {
+      if (outcome !== "完全勝利") { dmg += 1; log.push("Treacherous 觸發：未完全勝利 → 時間懲罰後再受 1 傷害"); }
+      else log.push("Treacherous 未觸發：完全勝利");
+    }
+    return { outcome, xp, timePenalty: tp, damageOther: dmg, attackElement: null, log };
+  }
+
+  // ---------- 懲罰：兩條帳 ----------
+  function soakDamage(hand, total, attackElement, order, log) {
+    if (total <= 0) return false;
+    const idxs = order || hand.map((_, i) => i);
+    let remaining = total; const done = new Set();
+    for (const i of idxs) {
+      if (remaining <= 0) break;
+      if (done.has(i) || i >= hand.length) continue;
+      const card = hand[i]; const lv = curLevel(card);
+      let soak = lv.armorValue;
+      const doubled = !!(lv.armorElement && attackElement && lv.armorElement === attackElement);
+      if (doubled) soak *= 2;
+      remaining -= soak; done.add(i);
+      card._downgradedThisEncounter = true;
+      if (card.level === 1) { log.push(`${card.name} 吸收 ${soak}${doubled ? "(雙倍)" : ""} → 銷毀`); card.level = 0; }
+      else { card.level -= 1; log.push(`${card.name} 吸收 ${soak}${doubled ? "(雙倍)" : ""} → 降到 L${card.level}`); }
+    }
+    // 移除銷毀
+    for (let i = hand.length - 1; i >= 0; i--) if (hand[i].level === 0) hand.splice(i, 1);
+    if (remaining > 0) { log.push(`剩餘 ${remaining} 傷害無法吸收 → KO`); return true; }
+    return false;
+  }
+  function resolvePenalty(deck, hand, timePenalty, damage, attackElement, opts) {
+    opts = opts || {}; const log = [];
+    const discardN = Math.min(timePenalty, deck.length);
+    deck.splice(0, discardN);
+    const shortfall = timePenalty - discardN;
+    if (timePenalty) log.push(`時間懲罰 ${timePenalty}：棄牌庫頂 ${discardN} 張${shortfall ? `，牌不夠 → ${shortfall} 轉成傷害` : ""}`);
+    let total = damage + shortfall;
+    if (opts.storm && timePenalty > 0) { total += timePenalty; log.push(`Storm 觸發：時間懲罰 ${timePenalty} → 額外 ${timePenalty} 傷害`); }
+    else if (opts.storm) { log.push("Storm 未觸發：沒有時間懲罰"); }
+    log.push(`傷害總額 = ${total}（攻擊元素 ${attackElement}）`);
+    const ko = soakDamage(hand, total, attackElement, opts.order, log);
+    if (ko && !opts.finalBattle) {
+      log.push("被擊倒(KO)：尚未降級的手牌全降級，棄牌庫頂 4 張，繼續");
+      for (let i = hand.length - 1; i >= 0; i--) {
+        const card = hand[i];
+        if (card._downgradedThisEncounter) continue;
+        card._downgradedThisEncounter = true;
+        if (card.level === 1) { log.push(`${card.name} KO追加降級 → 銷毀`); card.level = 0; }
+        else { card.level -= 1; log.push(`${card.name} KO追加降級 → L${card.level}`); }
+      }
+      for (let i = hand.length - 1; i >= 0; i--) if (hand[i].level === 0) hand.splice(i, 1);
+      deck.splice(0, Math.min(4, deck.length));
+    }
+    return { knockedOut: ko, log, totalDamage: total };
+  }
+
+  function doUpgrade(hand, xp, picks) {
+    const log = [`可用 XP = ${xp}`];
+    for (const i of picks) {
+      const card = hand[i]; if (!card) continue;
+      if (card.level >= 4) { log.push(`${card.name} 已滿級`); continue; }
+      if (card._downgradedThisEncounter) { log.push(`${card.name} 本遭遇已降級，不能在同一升級階段升級`); continue; }
+      const cost = curLevel(card).upgradeCost;
+      if (xp >= cost) { xp -= cost; card.level += 1; log.push(`花 ${cost} XP 升級 ${card.name} → L${card.level}（剩 ${xp}）`); }
+      else log.push(`XP 不足升級 ${card.name}（需 ${cost}，剩 ${xp}）`);
+    }
+    log.push(`剩餘 XP ${xp} 清空`);
+    return log;
+  }
+
+  // ---------- 最終戰 ----------
+  function resolveFinalJourney(sets, dragon, reserve) {
+    const log = []; let totalMove = 0;
+    const reserveBoost = reserve ? curLevel(reserve).boost : 0;
+    const mpElems = new Set(dragon.mpTiers.map(t => t[1]).filter(Boolean));
+    let usedReserve = false;
+    for (const s of sets) {
+      const elem = elementOf(s);
+      const [action, used] = pickAction(s.spell, elem);
+      let mv = actionValue(action, "move") + (s.boost ? curLevel(s.boost).boost : 0);
+      const isEnhMove = (used === "enhanced" && actionSupports(action, "move"));
+      if (!usedReserve && isEnhMove && reserveBoost && mpElems.has(curLevel(s.spell).enhanced.element)) {
+        mv += reserveBoost; usedReserve = true; log.push(`強化移動匹配 MP 元素 → 加預備卡 Boost +${reserveBoost}（限一次）`);
+      }
+      totalMove += mv; log.push(`行動組：移動 ${mv}（${used}）`);
+    }
+    log.push(`總移動 = ${totalMove}`);
+    const first = dragon.mpTiers[0][0];
+    if (totalMove < first) { log.push(`總移動 ${totalMove} < 第一檔 MP ${first} → 立即輸掉`); return { lose: true, timePenalty: 0, log }; }
+    let tp = 0;
+    for (const [mp, , pen] of dragon.mpTiers) if (totalMove >= mp) tp = pen;
+    log.push(`達到對應 MP 檔 → 時間懲罰 ${tp}`);
+    return { lose: false, timePenalty: tp, log };
+  }
+  function resolveFinalEnemy(sets, dragon) {
+    const log = []; let totalAtk = 0, totalInit = 0; const enhElems = new Set();
+    for (const s of sets) {
+      const elem = elementOf(s);
+      const [action, used] = pickAction(s.spell, elem);
+      let atk = actionValue(action, "attack");
+      let init = s.element ? curLevel(s.element).initiative : 0;
+      const b = s.boost ? curLevel(s.boost).boost : 0;
+      if (s.boostTarget === "initiative") init += b; else atk += b;
+      totalAtk += atk; totalInit += init;
+      if (used === "enhanced" && actionSupports(action, "attack")) enhElems.add(curLevel(s.spell).enhanced.element);
+      log.push(`行動組：攻擊 ${atk}、先攻 ${init}（${used}）`);
+    }
+    log.push(`總攻擊 = ${totalAtk}，總先攻 = ${totalInit}`);
+    let early = 0;
+    if (totalInit < dragon.initiative) { early = dragon.earlyDamage.value; log.push(`總先攻 < 龍先攻 ${dragon.initiative} → 早期傷害 ${early}（${dragon.earlyDamage.element}）`); }
+    for (const ar of dragon.armor) if (enhElems.has(ar.element)) { totalAtk = Math.max(0, totalAtk - ar.value); log.push(`龍護甲觸發：${ar.element}${ar.value} 匹配強化攻擊 → 總攻擊 ${totalAtk}`); }
+    const first = dragon.hpTiers[0][0];
+    if (totalAtk < first) { log.push(`總攻擊 ${totalAtk} < 第一檔 HP ${first} → 立即輸掉`); return { lose: true, log }; }
+    let combat = null, combatElem = null;
+    for (const [hp, hit] of dragon.hpTiers) if (totalAtk >= hp) { combat = hit.value; combatElem = hit.element; }
+    const totalDamage = early + combat;
+    log.push(`達 HP 檔 → 戰鬥傷害 ${combat}（${combatElem}）；龍總傷害 ${early}+${combat}=${totalDamage}`);
+    return { lose: false, totalDamage, damageElement: combatElem, log };
+  }
+
+  root.DOEEngine = {
+    mulberry32, shuffle, ceilHalf, curLevel, pickAction, actionValue, elementOf,
+    resolveEnemy, resolveJourney, resolvePenalty, soakDamage, doUpgrade,
+    resolveFinalJourney, resolveFinalEnemy, actionSupports,
+  };
+  if (typeof module !== "undefined" && module.exports) module.exports = root.DOEEngine;
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+<script>
+/* Dragons of Etchinstone — 資料 + WebGame 狀態機（移植自 doe_data.py / doe_game.py）。
+   瀏覽器與 node 皆可用。 */
+(function (root) {
+  "use strict";
+  const E = (typeof module !== "undefined" && module.exports) ? require("./engine.js") : root.DOEEngine;
+  const { mulberry32, shuffle, curLevel, resolveEnemy, resolveJourney, resolvePenalty,
+    doUpgrade, resolveFinalJourney, resolveFinalEnemy } = E;
+  const ELEMS = ["water", "fire", "lightning", "shadow"];
+
+  // ---------- 資料 ----------
+  function mkLevel(L, o) {
+    return {
+      level: L, encounterIcon: o.ei, encounterValue: o.ev, hardship: o.hard,
+      initiative: o.init,
+      basic: { type: o.bType, value: o.bVal },
+      enhanced: { type: o.eType, value: o.eVal, element: o.eElem },
+      boost: o.boost, armorValue: o.armor, armorElement: o.armorEl, upgradeCost: o.cost,
+    };
+  }
+  function mkCard(name, elem, kind, armorEl) {
+    const levels = {};
+    for (const L of [1, 2, 3, 4]) {
+      let bType, eType;
+      if (kind === "attacker") { bType = "attack"; eType = "attack"; }
+      else if (kind === "mover") { bType = "move"; eType = "move"; }
+      else { bType = "attack"; eType = "move"; }
+      levels[L] = mkLevel(L, {
+        bType, bVal: 1 + L, eType, eVal: 3 + 3 * L, eElem: elem,
+        init: (elem === "water" || elem === "lightning") ? L + 2 : L,
+        boost: (elem === "shadow") ? L + 2 : L,
+        armor: (elem === "water") ? L + 2 : L + 1,
+        armorEl, cost: (elem === "lightning") ? L + 2 : L + 1,
+        ei: (L % 2 === 0) ? "enemy" : "journey", ev: ((L - 1) % 4) + 1,
+        hard: (L === 4) ? "hazards" : null,
+      });
+    }
+    return { name, cardElement: elem, level: 2, levels };
+  }
+  function buildMageCards() {
+    if (root.DOE_REAL && root.DOE_REAL.mageCards)
+      return JSON.parse(JSON.stringify(root.DOE_REAL.mageCards)).map(c => { c.level = 2; return c; });
+    const specs = [
+      ["Brute Force", "water", "attacker", "fire"],
+      ["Tidal Guard", "water", "attacker", "water"],
+      ["Frostfire Wall", "water", "flex", "fire"],
+      ["Ice Wall", "water", "mover", "water"],
+      ["Rain of Blood", "fire", "attacker", null],
+      ["Burning Bridges", "fire", "attacker", "fire"],
+      ["Ember Dash", "fire", "mover", null],
+      ["Motivated Flight", "fire", "mover", "fire"],
+      ["River Swiftness", "lightning", "mover", null],
+      ["Fleet Footed", "lightning", "mover", "lightning"],
+      ["Storm Lance", "lightning", "attacker", null],
+      ["Determined March", "lightning", "mover", "lightning"],
+      ["Adapt", "shadow", "flex", null],
+      ["Distraction", "shadow", "flex", "shadow"],
+      ["Sword of Light", "shadow", "attacker", null],
+      ["Shadowstep", "shadow", "mover", "shadow"],
+    ];
+    return specs.map(s => mkCard(s[0], s[1], s[2], s[3]));
+  }
+  function buildRegions() {
+    if (root.DOE_REAL && root.DOE_REAL.regions) return root.DOE_REAL.regions;
+    const names = { 1: "Jade Mountains", 2: "Living Marsh", 3: "Burning Basin", 4: "Forest of Gath" };
+    const abil = [null, null, "ranged", "freeze"];
+    const peril = [null, null, "treacherous", "steep"];
+    const regions = {};
+    for (const r of [1, 2, 3, 4]) {
+      const base = r, enemies = [], journeys = [];
+      for (let i = 1; i <= 4; i++) enemies.push({
+        name: `${names[r]} Enemy ${i}`, hp: 5 + base * 2 + i, initiative: 1 + (i % 3),
+        attack: 2 + base, attackElement: ELEMS[(r + i) % 4],
+        armorValue: i >= 3 ? 1 : 0, armorElement: i >= 3 ? ELEMS[(r + i) % 4] : null,
+        xp: 2 + base + (i === 4 ? 1 : 0), ability: abil[i - 1],
+      });
+      for (let i = 1; i <= 4; i++) journeys.push({
+        name: `${names[r]} Journey ${i}`, mp: 5 + base * 2 + i, mpElement: ELEMS[(r + i + 1) % 4],
+        timePenalty: 1 + (i % 3), xp: 2 + base, peril: peril[i - 1],
+      });
+      regions[r] = { name: names[r], enemies, journeys };
+    }
+    return regions;
+  }
+  function buildDragons() {
+    if (root.DOE_REAL && root.DOE_REAL.dragons) return root.DOE_REAL.dragons;
+    const H = (v, e) => ({ value: v, element: e });
+    return {
+      "DOE-D01": { name: "Rodving (The Last Breath)", initiative: 9, earlyDamage: H(9, "fire"),
+        armor: [H(4, "fire")], mpTiers: [[20, "lightning", 3], [23, "lightning", 2], [28, "lightning", 1]],
+        hpTiers: [[22, H(27, "fire")], [27, H(24, "fire")], [32, H(15, "fire")]] },
+      "DOE-D02": { name: "Vuurhast", initiative: 8, earlyDamage: H(7, "water"),
+        armor: [H(3, "water")], mpTiers: [[18, "water", 3], [22, "water", 2], [26, "water", 1]],
+        hpTiers: [[20, H(24, "water")], [25, H(20, "water")], [30, H(12, "water")]] },
+    };
+  }
+
+  // ---------- 角色組合輔助 ----------
+  function buildSet(hand, s, e, b, t, fused) {
+    return { spell: hand[s], element: e != null ? hand[e] : null,
+      boost: b != null ? hand[b] : null, boostTarget: t, fusedElement: fused || null };
+  }
+  function firstReserveIdx(hand, roleIdx) {
+    for (let i = 0; i < hand.length; i++) if (!roleIdx.has(i)) return i;
+    return null;
+  }
+  function validateFuse(hand, elementIdx, bottomIdx, fusedElement) {
+    if (elementIdx == null) return { ok:false, reason:"融合需要指定 Element 角色作為上方卡" };
+    if (bottomIdx == null) return { ok:false, reason:"融合需要一張未指派的卡作為下方卡；下方卡不會成為預備卡" };
+    const top = hand[elementIdx], bottom = hand[bottomIdx];
+    if (!top || !bottom) return { ok:false, reason:"融合卡片不存在" };
+    if (top.cardElement !== bottom.cardElement) return { ok:false, reason:`融合失敗：上方卡 ${top.name} 是 ${top.cardElement}，下方卡 ${bottom.name} 是 ${bottom.cardElement}，兩張必須同元素` };
+    if (!fusedElement) return { ok:false, reason:"融合需要選擇替代後的 Ether 元素" };
+    return { ok:true, top, bottom, fusedElement };
+  }
+  function* enumAssign(n, encType) {
+    const targets = encType === "enemy" ? ["attack", "initiative"] : ["move"];
+    if (n >= 3) {
+      for (let s = 0; s < n; s++) for (let e = 0; e < n; e++) {
+        if (e === s) continue;
+        for (let b = 0; b < n; b++) { if (b === s || b === e) continue; for (const t of targets) yield [s, e, b, t]; }
+      }
+    } else if (n === 2) { for (let s = 0; s < 2; s++) { const e = 1 - s; for (const t of targets) yield [s, e, null, t]; } }
+    else if (n === 1) { for (const t of targets) yield [0, null, null, t]; }
+  }
+  const RANK = { "完全勝利": 2, "險勝": 1, "失敗": 0 };
+  function bestAssignment(hand, encType, target, hardships) {
+    hardships = (hardships || []).filter(x => x && x !== "none");
+    let best = null;
+    for (const [s, e, b, t] of enumAssign(hand.length, encType)) {
+      const set = buildSet(hand, s, e, b, t);
+      let r, dmg;
+      if (encType === "enemy") { r = resolveEnemy(set, target, hardships); dmg = r.damageEarly + r.damageCombat; }
+      else { r = resolveJourney(set, target, hardships); dmg = r.damageOther; }
+      const score = [RANK[r.outcome], r.xp, -dmg, -r.timePenalty];
+      if (!best || cmpArr(score, best.score) > 0) best = { score, pick: [s, e, b, t] };
+    }
+    return best.pick;
+  }
+  function cmpArr(a, b) { for (let i = 0; i < a.length; i++) { if (a[i] !== b[i]) return a[i] - b[i]; } return 0; }
+  function orderDowngrades(hand) {
+    return hand.map((_, i) => i).sort((x, y) => {
+      const a = curLevel(hand[x]), b = curLevel(hand[y]);
+      return (b.armorValue - a.armorValue) || (hand[y].level - hand[x].level);
+    });
+  }
+  function chooseUpgrades(hand, xp) {
+    const picks = []; let budget = xp; const lv = hand.map(c => c.level);
+    while (true) {
+      let cand = null;
+      for (let i = 0; i < hand.length; i++) {
+        if (lv[i] >= 4 || hand[i]._downgradedThisEncounter) continue;
+        const cost = hand[i].levels[lv[i]].upgradeCost;
+        if (cost <= budget && (!cand || cost < cand.cost)) cand = { cost, i };
+      }
+      if (!cand) break;
+      picks.push(cand.i); budget -= cand.cost; lv[cand.i] += 1;
+    }
+    return picks;
+  }
+  function makeTwoSets(hand, kind) {
+    const val = (c) => {
+      const b = curLevel(c).basic, e = curLevel(c).enhanced; let vs = [1];
+      if (E.actionSupports ? E.actionSupports(b, kind) : (b.type === kind || b.type === "both" || b.type === "attack/move")) vs.push(b.value); if (E.actionSupports ? E.actionSupports(e, kind) : (e.type === kind || e.type === "both" || e.type === "attack/move")) vs.push(e.value);
+      return Math.max(...vs);
+    };
+    const used = new Set(), sets = [];
+    const t = kind === "attack" ? "attack" : "move";
+    for (let k = 0; k < 2; k++) {
+      let avail = hand.map((_, i) => i).filter(i => !used.has(i));
+      if (!avail.length) break;
+      let s = avail.reduce((a, b) => val(hand[b]) > val(hand[a]) ? b : a, avail[0]);
+      used.add(s);
+      const enh = curLevel(hand[s]).enhanced;
+      avail = hand.map((_, i) => i).filter(i => !used.has(i));
+      let elem = null;
+      if ((E.actionSupports ? E.actionSupports(enh, kind) : (enh.type === kind || enh.type === "both" || enh.type === "attack/move")) && enh.element) {
+        const match = avail.filter(i => hand[i].cardElement === enh.element);
+        if (match.length) elem = match.reduce((a, b) => curLevel(hand[b]).initiative > curLevel(hand[a]).initiative ? b : a, match[0]);
+      }
+      if (elem == null && avail.length) elem = avail.reduce((a, b) => curLevel(hand[b]).initiative > curLevel(hand[a]).initiative ? b : a, avail[0]);
+      if (elem != null) used.add(elem);
+      avail = hand.map((_, i) => i).filter(i => !used.has(i));
+      let bo = avail.length ? avail.reduce((a, b) => curLevel(hand[b]).boost > curLevel(hand[a]).boost ? b : a, avail[0]) : null;
+      if (bo != null) used.add(bo);
+      sets.push({ spell: hand[s], element: elem != null ? hand[elem] : null, boost: bo != null ? hand[bo] : null, boostTarget: t, fusedElement: null });
+    }
+    return sets;
+  }
+
+  function makeTwoSetsIdx(hand, kind) {
+    const val = (c) => { const b = curLevel(c).basic, e = curLevel(c).enhanced; let v = [1]; if (E.actionSupports ? E.actionSupports(b, kind) : (b.type === kind || b.type === "both" || b.type === "attack/move")) v.push(b.value); if (E.actionSupports ? E.actionSupports(e, kind) : (e.type === kind || e.type === "both" || e.type === "attack/move")) v.push(e.value); return Math.max(...v); };
+    const used = new Set(), sets = [];
+    for (let k = 0; k < 2; k++) {
+      let av = hand.map((_, i) => i).filter(i => !used.has(i)); if (!av.length) break;
+      let s = av.reduce((a, b) => val(hand[b]) > val(hand[a]) ? b : a, av[0]); used.add(s);
+      const enh = curLevel(hand[s]).enhanced;
+      av = hand.map((_, i) => i).filter(i => !used.has(i)); let el = null;
+      if ((E.actionSupports ? E.actionSupports(enh, kind) : (enh.type === kind || enh.type === "both" || enh.type === "attack/move")) && enh.element) { const m = av.filter(i => hand[i].cardElement === enh.element); if (m.length) el = m.reduce((a, b) => curLevel(hand[b]).initiative > curLevel(hand[a]).initiative ? b : a, m[0]); }
+      if (el == null && av.length) el = av.reduce((a, b) => curLevel(hand[b]).initiative > curLevel(hand[a]).initiative ? b : a, av[0]);
+      if (el != null) used.add(el);
+      av = hand.map((_, i) => i).filter(i => !used.has(i));
+      let bo = av.length ? av.reduce((a, b) => curLevel(hand[b]).boost > curLevel(hand[a]).boost ? b : a, av[0]) : null;
+      if (bo != null) used.add(bo);
+      sets.push({ s, e: el, b: bo });
+    }
+    let reserveIdx = hand.map((_, i) => i).find(i => !used.has(i));
+    return { sets, reserveIdx: reserveIdx == null ? null : reserveIdx };
+  }
+
+  // ---------- WebGame 狀態機 ----------
+  class WebGame {
+    constructor(seed, dragonId) {
+      this.rnd = mulberry32((seed >>> 0) || 1);
+      this.allCards = buildMageCards();
+      this.regions = buildRegions();
+      this.dragon = buildDragons()[dragonId || "Red Dragon"];
+      this.deck = []; this.hand = []; this.discard = [];
+      this.regionIdx = 1; this.pendingPoison = 0; this.regroupUsed = false;
+      this.phase = "init"; this.log = []; this.tx = null;
+      this.result = null; // {win, score}
+    }
+    out(msg) { this.log.push(msg); }
+    _clearEncounterFlags() { for (const c of this.allCards) delete c._downgradedThisEncounter; }
+    aliveCards() { return this.allCards.filter(c => c.level >= 1); }
+    reshuffleAll() { this.deck = shuffle(this.aliveCards(), this.rnd); this.hand = []; this.discard = []; }
+    drawTo(n) { while (this.hand.length < n && this.deck.length) this.hand.push(this.deck.shift()); }
+
+    start() {
+      for (const c of this.allCards) { c.level = 2; delete c._downgradedThisEncounter; }
+      this.reshuffleAll(); this.drawTo(4); this.regionIdx = 1;
+      this.out(`對手龍：${this.dragon.name}`);
+      this._beginEncounter();
+      return this;
+    }
+    _beginEncounter() {
+      if (this.regionIdx > 4) { this._startFinal(); return; }
+      if (!this.deck.length) { this._endRegion(); return; }
+      this.divertsLeft = 2;
+      this._scout();
+    }
+    _scout() {
+      const key = this.deck[0], klv = curLevel(key);
+      const encType = klv.encounterIcon, idx = klv.encounterValue - 1;
+      const reg = this.regions[this.regionIdx];
+      const target = encType === "enemy" ? reg.enemies[idx] : reg.journeys[idx];
+      const h = klv.hardship;
+      const hardships = (h && h !== "none") ? [h] : [];
+      this.enc = { key, encType, target, hardships };
+      this.phase = "challenge";
+    }
+    divert(handIdx) {
+      if (this.divertsLeft <= 0 || !this.hand.length) return false;
+      const drop = this.hand.splice(handIdx, 1)[0];
+      this.discard.push(drop, this.deck.shift());
+      this.divertsLeft -= 1;
+      this.out(`繞道：棄 ${drop.name} 與關鍵卡`);
+      if (!this.deck.length) { this._endRegion(); return true; }
+      this._scout(); return true;
+    }
+    toAction() { this.phase = "action"; }
+    _ruleError(reason) {
+      this.out(`規則錯誤：${reason}`);
+      return { ok:false, error:reason, log:[reason] };
+    }
+
+    // assignment: {s, e, b, t, fuse, fusedElement, negateRanged, slowUseMove}
+    resolveAction(a) {
+      a = a || {};
+      const enc = this.enc;
+      if (!enc) return this._ruleError("目前沒有 Encounter 可以結算");
+      if (this.phase !== "action") return this._ruleError("目前不是 Action Phase，不能結算行動");
+      if (a.s == null || !this.hand[a.s]) return this._ruleError("必須指定 Spell 角色卡");
+      const usedIdx = [a.s, a.e, a.b].filter(x => x != null);
+      if (new Set(usedIdx).size !== usedIdx.length) return this._ruleError("同一張手牌不能同時擔任多個角色");
+
+      const roleIdx = new Set(usedIdx);
+      let reserveIdx = firstReserveIdx(this.hand, roleIdx);
+      let reserveCard = reserveIdx != null ? this.hand[reserveIdx] : null;
+      let fusedEl = null, fusedBottom = null;
+      if (a.fuse) {
+        const vf = validateFuse(this.hand, a.e, reserveIdx, a.fusedElement);
+        if (!vf.ok) return this._ruleError(vf.reason);
+        fusedEl = vf.fusedElement;
+        fusedBottom = vf.bottom;
+        reserveCard = null; // 下方卡消失，不能當預備卡，也不能提供預備 Boost / Ranged 防禦
+        this.out(`融合：${vf.top.name} + ${vf.bottom.name}（同為 ${vf.top.cardElement}）→ Element 改為 ${fusedEl}`);
+      }
+      const set = buildSet(this.hand, a.s, a.e, a.b, a.t, fusedEl);
+      const roleCards = usedIdx.map(i => this.hand[i]);
+
+      let r, dmg, atkEl;
+      if (enc.encType === "enemy") {
+        const canNegateRanged = !!(a.negateRanged && enc.target.ability === "ranged" && reserveCard && !fusedBottom);
+        r = resolveEnemy(set, enc.target, enc.hardships, { negateRanged: canNegateRanged, slowUseMove: a.slowUseMove });
+        dmg = r.damageEarly + r.damageCombat; atkEl = r.attackElement;
+      } else {
+        r = resolveJourney(set, enc.target, enc.hardships, { reserve: reserveCard });
+        dmg = r.damageOther; atkEl = null;
+      }
+      r.log.forEach(l => this.out(l));
+      this.out(`結果：${r.outcome}｜XP ${r.xp}｜時間懲罰 ${r.timePenalty}｜傷害 ${dmg}`);
+      if (fusedBottom) {
+        const i = this.hand.indexOf(fusedBottom);
+        if (i >= 0) { this.hand.splice(i, 1); this.discard.push(fusedBottom); this.out(`融合下方卡 ${fusedBottom.name} 移出手牌`); }
+      }
+      this.tx = { r, dmg, atkEl, roleCards, reserveCard, set, needDiscardReserve: r.discardReserve, fuse: !!fusedBottom, fusedBottom };
+      this.phase = "penalty";
+      return r;
+    }
+    // 懲罰：order=要降級的手牌索引順序（可空→自動）
+    applyPenalty(order) {
+      const { r, dmg, atkEl } = this.tx;
+      const ord = order || orderDowngrades(this.hand);
+      const pen = resolvePenalty(this.deck, this.hand, r.timePenalty, dmg, atkEl,
+        { storm: this.enc.hardships.includes("storm"), order: ord });
+      pen.log.forEach(l => this.out(l));
+      this.tx.ko = pen.knockedOut;
+      this.phase = "upgrade";
+      return pen;
+    }
+    applyUpgrade(picks) {
+      const { r } = this.tx;
+      if (r.xp > 0 && this.hand.length) doUpgrade(this.hand, r.xp, (picks || []).filter(p => p < this.hand.length)).forEach(l => this.out(l));
+      this._cleanup();
+    }
+    _cleanup() {
+      const tx = this.tx;
+      for (const c of tx.roleCards) { const i = this.hand.indexOf(c); if (i >= 0) { this.hand.splice(i, 1); this.discard.push(c); } }
+      if (tx.needDiscardReserve && tx.reserveCard) { const i = this.hand.indexOf(tx.reserveCard); if (i >= 0) { this.hand.splice(i, 1); this.discard.push(tx.reserveCard); this.out("清理：棄掉預備卡（Freeze/Ranged）"); } }
+      this.drawTo(4);
+      if (tx.r.poison && this.hand.length) this.pendingPoison += tx.r.poison;
+      if (this.pendingPoison && this.hand.length) {
+        this.out(`Poison：新手牌追加 ${this.pendingPoison} 傷害`);
+        resolvePenalty(this.deck, this.hand, 0, this.pendingPoison, null, { order: orderDowngrades(this.hand) }).log.forEach(l => this.out(l));
+        this.pendingPoison = 0;
+      }
+      this.tx = null;
+      this._clearEncounterFlags();
+      if (this.deck.length + this.hand.length < 5) { this._endRegion(); return; }
+      this._beginEncounter();
+    }
+    _endRegion() {
+      if (this.regionIdx >= 4) { this._startFinal(); return; }
+      this.out(`▷ 地區 ${this.regionIdx} 結束，重洗進入下一區`);
+      this.regionIdx += 1; this.reshuffleAll(); this.drawTo(4);
+      this._beginEncounter();
+    }
+
+    // ---------- 最終戰 ----------
+    _startFinal() {
+      this.out("—— 最終戰 ——");
+      this.reshuffleAll(); this.drawTo(7);
+      this.phase = "final_journey_intro";
+    }
+    // Regroup（整局限一次）：棄 1 張、其餘洗回牌庫後方、重抽 7
+    regroup(idx) {
+      if (this.regroupUsed || idx == null || !this.hand.length) return false;
+      const dropped = this.hand.splice(idx, 1)[0];
+      this.discard.push(dropped); shuffle(this.hand, this.rnd);
+      this.deck = this.deck.concat(this.hand); this.hand = []; this.drawTo(7);
+      this.regroupUsed = true;
+      this.out(`Regroup：棄 ${dropped.name}，重抽 7 張`);
+      return true;
+    }
+    // spec = { sets:[{s,e,b,t?,fusedElement?}...], reserveIdx, fuseSetIndex }
+    finalJourneyResolve(spec) {
+      spec = spec || {};
+      const setsSpec = spec.sets || [];
+      if (this.phase !== "final_journey" && this.phase !== "final_journey_intro") return this._ruleError("目前不是 Final Journey Phase");
+      let reserveIdx = spec.reserveIdx != null ? spec.reserveIdx : null;
+      let reserve = reserveIdx != null ? this.hand[reserveIdx] : null;
+      let fusedBottom = null;
+      const sets = [];
+      for (let k = 0; k < setsSpec.length; k++) {
+        const s = setsSpec[k];
+        if (!s || s.s == null || !this.hand[s.s]) return this._ruleError(`Final Journey 組${k+1} 必須指定 Spell`);
+        const usedIdx = [s.s, s.e, s.b].filter(x => x != null);
+        if (new Set(usedIdx).size !== usedIdx.length) return this._ruleError(`Final Journey 組${k+1} 有重複角色卡`);
+        let fusedEl = null;
+        if (spec.fuseSetIndex === k) {
+          const vf = validateFuse(this.hand, s.e, reserveIdx, s.fusedElement);
+          if (!vf.ok) return this._ruleError(vf.reason);
+          fusedEl = vf.fusedElement; fusedBottom = vf.bottom; reserve = null; this.out(`融合：組${k+1} ${vf.top.name} + ${vf.bottom.name} → Element 改為 ${fusedEl}`);
+        }
+        sets.push(buildSet(this.hand, s.s, s.e, s.b, s.t || "move", fusedEl));
+      }
+      if (fusedBottom) { const i = this.hand.indexOf(fusedBottom); if (i >= 0) { this.hand.splice(i,1); this.discard.push(fusedBottom); this.out(`融合下方卡 ${fusedBottom.name} 移出手牌`); } }
+      const fj = resolveFinalJourney(sets, this.dragon, reserve);
+      fj.log.forEach(l => this.out(l));
+      if (fj.lose) { this._finish(false); return fj; }
+      if (fj.timePenalty) {
+        const pen = resolvePenalty(this.deck, this.hand, fj.timePenalty, 0, null, {});
+        pen.log.forEach(l => this.out(l));
+        if (pen.knockedOut) { this._finish(false); return fj; }
+      }
+      this.discard = this.discard.concat(this.hand); this.hand = []; // Rest
+      this.hand = this.deck.slice(); this.deck = [];
+      this.phase = "final_enemy_intro";
+      this.out(`最終敵人：抽光剩餘 ${this.hand.length} 張`);
+      return fj;
+    }
+    finalEnemyResolve(spec) {
+      spec = spec || {};
+      if (!this.hand.length) { this._finish(false); return null; }
+      if (this.phase !== "final_enemy" && this.phase !== "final_enemy_intro") return this._ruleError("目前不是 Final Enemy Phase");
+      const setsSpec = spec.sets || [];
+      let reserveIdx = spec.reserveIdx != null ? spec.reserveIdx : null;
+      let fusedBottom = null;
+      const sets = [];
+      for (let k = 0; k < setsSpec.length; k++) {
+        const s = setsSpec[k];
+        if (!s || s.s == null || !this.hand[s.s]) return this._ruleError(`Final Enemy 組${k+1} 必須指定 Spell`);
+        const usedIdx = [s.s, s.e, s.b].filter(x => x != null);
+        if (new Set(usedIdx).size !== usedIdx.length) return this._ruleError(`Final Enemy 組${k+1} 有重複角色卡`);
+        let fusedEl = null;
+        if (spec.fuseSetIndex === k) {
+          const vf = validateFuse(this.hand, s.e, reserveIdx, s.fusedElement);
+          if (!vf.ok) return this._ruleError(vf.reason);
+          fusedEl = vf.fusedElement; fusedBottom = vf.bottom; this.out(`融合：組${k+1} ${vf.top.name} + ${vf.bottom.name} → Element 改為 ${fusedEl}`);
+        }
+        sets.push(buildSet(this.hand, s.s, s.e, s.b, s.t || "attack", fusedEl));
+      }
+      if (fusedBottom) { const i = this.hand.indexOf(fusedBottom); if (i >= 0) { this.hand.splice(i,1); this.discard.push(fusedBottom); this.out(`融合下方卡 ${fusedBottom.name} 移出手牌`); } }
+      const fe = resolveFinalEnemy(sets, this.dragon);
+      fe.log.forEach(l => this.out(l));
+      if (fe.lose) { this._finish(false); return fe; }
+      const pen = resolvePenalty(this.deck, this.hand, 0, fe.totalDamage, fe.damageElement,
+        { order: orderDowngrades(this.hand), finalBattle: true });
+      pen.log.forEach(l => this.out(l));
+      this._finish(!pen.knockedOut);
+      return fe;
+    }
+    _finish(win) {
+      const score = win ? this.aliveCards().reduce((s, c) => s + c.level, 0) : 0;
+      this.result = { win, score };
+      this.phase = "gameover";
+      this.out(win ? `🏆 勝利！分數 = ${score}` : "💀 失敗，分數 0");
+    }
+  }
+
+  root.DOEData = { buildMageCards, buildRegions, buildDragons };
+  root.DOEGame = { WebGame, bestAssignment, orderDowngrades, chooseUpgrades, makeTwoSets, makeTwoSetsIdx, buildSet, validateFuse, firstReserveIdx };
+  if (typeof module !== "undefined" && module.exports) module.exports = { WebGame, bestAssignment, orderDowngrades, chooseUpgrades, makeTwoSets, makeTwoSetsIdx, buildSet, validateFuse, firstReserveIdx, buildMageCards, buildRegions, buildDragons };
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+<script>
+window.onerror=function(msg,src,line,col){
+  var s=document.getElementById('sub'); if(s)s.textContent='發生錯誤';
+  var m=document.getElementById('main'); if(m)m.innerHTML='<div class="banner">JS 錯誤：'+msg+' （'+line+':'+col+'）</div>';
+  return false;
+};
+const EL={water:"w",fire:"f",lightning:"l",shadow:"s"};
+const ELC={water:"#3b82f6",fire:"#ef4444",lightning:"#eab308",shadow:"#a78bfa"};
+const elc=(e)=>ELC[e]||"#cbd5e1";
+// SVG 圖示（24x24 path）：元素/動作/防具…，顏色代表屬性
+const PATHS={
+  water:"M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z",
+  fire:"M13 2c.4 4 4 5 4 9a5 5 0 0 1-10 0c0-2.2 1.3-3.4 2.2-4 .1 1 .7 1.7 1.3 2C9.5 6.5 11 4 13 2z",
+  lightning:"M13 2L4 14h6l-2 8 10-13h-7l2-7z",
+  shadow:"M15.5 2A9 9 0 1 0 20 15 7.5 7.5 0 0 1 15.5 2z",
+  sword:"M11 2h2v11h-2zM8 13h8v2H8zM11 15h2v6h-2z",
+  boot:"M8 3h3v9h3.5c2.2 0 4.5 1.4 4.5 4v2a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V3z",
+  shield:"M12 2l8 3v6c0 5-3.4 9-8 11-4.6-2-8-6-8-11V5l8-3z",
+  boost:"M12 3l7 8h-4v8h-6v-8H5z",
+  init:"M4 5l7 7-7 7zM12 5l7 7-7 7z",
+  upgrade:"M12 3l6 7h-4v5h-4v-5H6zM7 18h10v2H7z",
+  hourglass:"M6 2h12v3.5L13 10l5 4.5V18H6v-3.5L11 10 6 5.5z",
+  heart:"M12 21C6 16 3 12.5 3 8.5A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 9 2.5C21 12.5 18 16 12 21z",
+  mountain:"M2 19l6-11 4 6 2.5-4L22 19z",
+  star:"M12 2l2.9 6 6.1.9-4.5 4.2 1.1 6.1L12 16.4 6.4 19.2l1.1-6.1L3 8.9 9.1 8z",
+  skull:"M12 2a8 8 0 0 0-8 8c0 2.4 1.4 3.9 2.4 5v3h2v-2h1v2h1v-2h1v2h2v-3c1-1.1 2.6-2.6 2.6-5a8 8 0 0 0-8-8zM9 9a1.6 1.6 0 1 1 0 3.2A1.6 1.6 0 0 1 9 9zm6 0a1.6 1.6 0 1 1 0 3.2A1.6 1.6 0 0 1 15 9z",
+};
+function ic(name,color,size){size=size||19;return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="${color||'#cbd5e1'}" aria-hidden="true" style="vertical-align:-3px"><path d="${PATHS[name]}"/></svg>`;}
+function chip(name,color,num){return `<span class="chip">${ic(name,color)}${num!=null?`<b>${num}</b>`:""}</span>`;}
+function isBothAction(t){return t==="both"||t==="attack/move"||t==="move/attack";}
+function actName(t){return t==="move"?"boot":"sword";}        // attack→劍, move→靴
+function actChip(action,color){
+  if(isBothAction(action.type)) return `<span class="chip">${ic("sword",color)}${ic("boot",color)}<b>${action.value}</b></span>`;
+  return chip(actName(action.type),color,action.value);
+}
+let g, ui;
+const curLevel = DOEEngine.curLevel;
+
+function normEffect(e){ return (e && e !== "none") ? e : null; }
+function effectMeta(e){
+  const M={
+    night_travel:{icon:"shadow", color:"#c4b5fd", label:"Night Travel", short:"Night", group:"Hardship", desc:"Boost 減少你的 Initiative，最低為 0。"},
+    hazards:{icon:"mountain", color:"#facc15", label:"Hazards", short:"Hazard", group:"Hardship", desc:"受 Early Damage：+1 時間；受 Combat Damage：再 +1 時間。"},
+    storm:{icon:"lightning", color:"#93c5fd", label:"Storm", short:"Storm", group:"Hardship", desc:"若本遭遇承受時間懲罰，追加等量傷害。"},
+    ambush:{icon:"sword", color:"#fca5a5", label:"Ambush", short:"Ambush", group:"Hardship", desc:"本遭遇 Early Damage 加倍。"},
+    ranged:{icon:"sword", color:"#fbbf24", label:"Ranged", short:"Ranged", group:"Enemy Ability", desc:"即使先攻足夠仍造成 Early Damage；可棄 Reserve 卡忽略。"},
+    slow:{icon:"hourglass", color:"#fde68a", label:"Slow", short:"Slow", group:"Enemy Ability", desc:"可用 Move 取代 Attack 與敵人 HP 比較。"},
+    freeze:{icon:"water", color:"#93c5fd", label:"Freeze", short:"Freeze", group:"Enemy Ability", desc:"若此敵人造成 Early Damage，清理階段須棄 1 張 Reserve 卡。"},
+    poison:{icon:"skull", color:"#86efac", label:"Poison", short:"Poison", group:"Enemy Ability", desc:"受傷時，下一手牌 +1 傷害；若 Early 與 Combat 都受傷則 +2。"},
+    steep:{icon:"mountain", color:"#d8b4fe", label:"Steep", short:"Steep", group:"Journey Peril", desc:"Journey MP 加上 Reserve 卡的 Boost。"},
+    treacherous:{icon:"skull", color:"#fca5a5", label:"Treacherous", short:"Treach.", group:"Journey Peril", desc:"未完全勝利時，先結算時間懲罰，再受 1 傷害。"},
+  };
+  return M[e] || {icon:"star", color:"#fcd34d", label:String(e), short:String(e), group:"Effect", desc:"特殊效果。"};
+}
+function effectChip(e,opts){
+  e=normEffect(e); if(!e) return ""; opts=opts||{};
+  const m=effectMeta(e);
+  const txt=opts.short?m.short:m.label;
+  const cls=m.group==="Hardship"?"hardship":m.group==="Enemy Ability"?"enemy-ability":m.group==="Journey Peril"?"journey-peril":"";
+  return `<span class="effect-chip ${cls}" title="${m.desc}">${ic(m.icon,m.color,opts.size||15)}<span>${txt}</span></span>`;
+}
+function effectsHTML(list,opts){ return (list||[]).map(normEffect).filter(Boolean).map(e=>effectChip(e,opts)).join(""); }
+function effectStatCell(e,label){
+  e=normEffect(e); if(!e) return "";
+  const m=effectMeta(e);
+  return `<div class="stat-cell effect-cell"><div class="stat-label">${ic(m.icon,m.color,16)}<span>${label||m.group}</span></div><div class="effect-value">${m.short}</div></div>`;
+}
+let LEGEND_HTML="";
+function buildLegend(){
+  const el=document.getElementById("legend");
+  const iconCard=(icon,color,label,wide=false)=>`<div class="legend-icon-card ${wide?"wide":""}">${ic(icon,color,wide?20:24)}<span>${label}</span></div>`;
+  const ruleItem=(e)=>{ const m=effectMeta(e); return `<div class="legend-rule-item"><div class="legend-rule-icon">${ic(m.icon,m.color,18)}</div><div class="legend-rule-body"><div class="legend-rule-name">${m.label}</div><div class="legend-rule-desc">${m.desc}</div></div></div>`; };
+  const section=(title,body)=>`<div class="legend-section"><div class="legend-title">${title}</div>${body}</div>`;
+  LEGEND_HTML =
+    section("基本數值", `
+      <div class="legend-basic-grid">
+        ${iconCard("init","#cbd5e1","先攻")}
+        ${iconCard("sword","#cbd5e1","攻擊")}
+        ${iconCard("boot","#cbd5e1","移動")}
+        ${iconCard("boost","#bbf7d0","Boost")}
+        ${iconCard("shield","#e2e8f0","護甲")}
+        ${iconCard("upgrade","#cbd5e1","升級花費")}
+        ${iconCard("heart","#fca5a5","HP")}
+        ${iconCard("star","#fcd34d","XP")}
+        ${iconCard("mountain","#93c5fd","MP")}
+        ${iconCard("hourglass","#cbd5e1","時間懲罰")}
+        <div class="legend-icon-card"><div class="legend-inline-ele">${ic("water",elc("water"),24)}<span>水</span></div></div>
+        <div class="legend-icon-card"><div class="legend-inline-ele">${ic("fire",elc("fire"),24)}<span>火</span></div></div>
+        <div class="legend-icon-card"><div class="legend-inline-ele">${ic("lightning",elc("lightning"),24)}<span>雷</span></div></div>
+        <div class="legend-icon-card"><div class="legend-inline-ele">${ic("shadow",elc("shadow"),24)}<span>暗</span></div></div>
+      </div>`)+
+    section("苦難 / Hardship", `<div class="legend-rule-list">${["night_travel","hazards","storm","ambush"].map(ruleItem).join("")}</div>`)+
+    section("敵人能力 / Ability", `<div class="legend-rule-list">${["ranged","slow","freeze","poison"].map(ruleItem).join("")}</div>`)+
+    section("旅程危險 / Peril", `<div class="legend-rule-list">${["steep","treacherous"].map(ruleItem).join("")}</div>`);
+  if(el) el.innerHTML=LEGEND_HTML;
+}
+function newGame(seed){
+  g=new DOEGame.WebGame(seed||((Math.random()*1e9)|0),"Red Dragon");
+  g.start();
+  ui={sel:{s:null,e:null,b:null},bt:"attack",fuse:false,fuseElement:null,negateRanged:true,diverting:false,flipped:false,
+      dpicks:[],upicks:[],upSpent:0,upLevels:[],flash:null,regroup:false,
+      fsel:{sets:[{s:null,e:null,b:null},{s:null,e:null,b:null}]},previewIdx:null,justPreview:false,handPreviewOpen:false,actionPreview:null,legendOpen:false};
+  buildLegend();
+  render();
+}
+function cur(c){return c.levels[c.level];}
+function row(name,color,num){return `<div class="r">${ic(name,color)}<b>${num}</b></div>`;}
+function actR(act,color){
+  const i=isBothAction(act.type)?ic("sword",color)+ic("boot",color):ic(act.type==="move"?"boot":"sword",color);
+  return `<div class="r">${i}<b>${act.value}</b></div>`;
+}
+function elemLabel(e){return {water:"Water",fire:"Fire",lightning:"Lightning",shadow:"Shadow"}[e]||e||"";}
+function actionLabel(t){
+  if(isBothAction(t)) return "A/M";
+  return t==="move"?"Move":"Attack";
+}
+function actionIcons(action,color,size){
+  if(isBothAction(action.type)) return `<span class="dual-icons">${ic("sword",color,size)}${ic("boot",color,size)}</span>`;
+  return ic(action.type==="move"?"boot":"sword",color,size);
+}
+function statCell(iconName,color,label,value,small){
+  return `<div class="stat-cell"><div class="stat-label">${ic(iconName,color,16)}<span>${label}</span></div><div class="stat-value ${small?'small':''}">${value}</div></div>`;
+}
+function actionStatCell(action,label){
+  const color="#cbd5e1";
+  const iconHTML=actionIcons(action,color,16);
+  return `<div class="stat-cell"><div class="stat-label">${iconHTML}<span>${label}</span></div><div class="stat-value">${action.value}</div></div>`;
+}
+function levelCostNote(c,L){
+  const lv=c.levels[L];
+  if(L>=4) return "Max";
+  return `升到 L${L+1}：${lv.upgradeCost} XP`;
+}
+function cardStatsBlock(c,L,opts){
+  opts=opts||{};
+  const lv=c.levels[L];
+  const armC=lv.armorElement?elc(lv.armorElement):"#cbd5e1";
+  const enhC=elc(lv.enhanced.element);
+  const enhIcon=actionIcons(lv.enhanced,enhC,16);
+  const h=normEffect(lv.hardship);
+  const enhLabel=h ? "Enh." : "Enhanced";
+  const enhCell=`<div class="stat-cell enh-cell"><div class="stat-label">${enhIcon}<span>${enhLabel}</span></div><div class="stat-value" style="color:${enhC}">${lv.enhanced.value}</div></div>`;
+  const base=`${statCell("init","#cbd5e1","Init",lv.initiative)}
+      ${statCell("boost","#86efac","Boost",`+${lv.boost}`)}
+      ${actionStatCell(lv.basic,"Basic")}
+      ${statCell("shield",armC,"Armor",lv.armorValue)}`;
+  if(h){
+    return `<div class="stat-grid six">
+      ${base}
+      ${enhCell}
+      ${effectStatCell(h,"Hard")}
+    </div>`;
+  }
+  return `<div class="stat-grid">
+      ${base}
+    </div>
+    <div class="enh-row"><div class="enh-label">${enhIcon}<span>Enhanced</span></div><div class="enh-value" style="color:${enhC}">${lv.enhanced.value}</div></div>`;
+}
+
+function shortName(name){
+  const M={
+    "Rain of Blood":"Rain Blood",
+    "River Swiftness":"River Swift",
+    "Sword of Light":"Sword Light",
+    "Burning Bridges":"Burning Bridge",
+    "Motivated Flight":"Mot. Flight",
+    "Determined March":"Determined"
+  };
+  return M[name]||name;
+}
+function cardHTML(c,i,opts){
+  opts=opts||{};
+  const cls=EL[c.cardElement];
+  const sel=opts.sel?"sel":"";
+  const L=c.level;
+  const pop=opts.pop?`<div class="rolepop ${opts.pop.cls}">${opts.pop.text}</div>`:"";
+  return `<div class="card ${cls} ${sel}" data-i="${i}">
+    <div class="card-head">
+      <div style="min-width:0;flex:1 1 auto">
+        <div class="card-title"><span class="level-badge">L${L}</span>${ic(c.cardElement,elc(c.cardElement),20)}<span title="${c.name}">${shortName(c.name)}</span></div>
+      </div>
+      ${pop||''}
+    </div>
+    ${cardStatsBlock(c,L)}
+  </div>`;
+}
+function handHTML(popOf,selOf){
+  return `<div class="row">`+g.hand.map((c,i)=>cardHTML(c,i,{pop:popOf?popOf(i):null,sel:selOf?selOf(i):false})).join("")+`</div>`;
+}
+
+function encBaseName(name){
+  return String(name||"").replace(/\s*#\d+\s*$/,"");
+}
+function encHTML(){
+  const e=g.enc, t=e.target;
+  const reg=g.regions && g.regions[g.regionIdx];
+  if(e.encType==="enemy"){
+    const armors=(t.armor && t.armor.length)?t.armor:(t.armorValue?[{value:t.armorValue,element:t.armorElement}]:[]);
+    const armorHTML=armors.map(a=>chip("shield",a.element?elc(a.element):"#cbd5e1",a.value)).join("");
+    const enemyNo=reg && reg.enemies ? (reg.enemies.indexOf(t)+1) : "";
+    const fxHTML=(t.ability||e.hardships.length) ? `${t.ability?effectChip(t.ability,{short:true}):""}${effectsHTML(e.hardships,{short:true})}` : "";
+    return `<div class="enc">
+      <div class="enc-mini-title">${ic("skull","#ffffff",15)}<span>Enemy : ${encBaseName(t.name)} ${enemyNo?`#${enemyNo}`:""}</span></div>
+      <div class="chips big">
+        ${chip("heart","#fca5a5",t.hp)}
+        ${chip("init","#cbd5e1",t.initiative)}
+        ${chip("sword",elc(t.attackElement),t.attack)}
+        ${armorHTML}
+        ${chip("star","#fcd34d",t.xp)}
+        ${fxHTML}
+      </div>
+    </div>`;
+  }
+  const journeyNo=reg && reg.journeys ? (reg.journeys.indexOf(t)+1) : "";
+  const fxHTML=(t.peril||e.hardships.length) ? `${t.peril?effectChip(t.peril,{short:true}):""}${effectsHTML(e.hardships,{short:true})}` : "";
+  return `<div class="enc">
+    <div class="enc-mini-title">${ic("mountain","#ffffff",15)}<span>Journey : ${encBaseName(t.name)} ${journeyNo?`#${journeyNo}`:""}</span></div>
+    <div class="chips big">
+      ${chip("mountain",elc(t.mpElement),t.mp)}
+      ${chip("hourglass","#cbd5e1",t.timePenalty)}
+      ${chip("star","#fcd34d",t.xp)}
+      ${fxHTML}
+    </div>
+  </div>`;
+}
+
+function render(){
+  document.getElementById("sub").textContent =
+    g.phase==="gameover"?"結束":`地區 ${g.regionIdx>4?4:g.regionIdx} · ${phaseName()}`;
+  document.getElementById("deckinfo").innerHTML = `牌庫 ${g.deck.length}<br>手牌 ${g.hand.length}`;
+  const m=document.getElementById("main");
+  m.innerHTML = viewFor()+previewHTML()+handPreviewHTML()+actionPreviewHTML()+legendModalHTML();
+  // log
+  const lg=document.getElementById("log");
+  lg.textContent = g.log.slice(-40).join("\n");
+  lg.scrollTop = lg.scrollHeight;
+  bindCards();
+  setHint();
+}
+function phaseName(){return {challenge:"挑戰",action:"行動",penalty:"懲罰",upgrade:"升級",
+  final_journey_intro:"最終旅程",final_enemy_intro:"最終敵人",gameover:"結束"}[g.phase]||g.phase;}
+
+
+function rbPill(icon,color,value,extraCls){
+  return `<div class="rb-num-pill ${extraCls||''}">${ic(icon,color,14)}<span>${value}</span></div>`;
+}
+function rbArmorPills(t){
+  const armors=(t.armor && t.armor.length)?t.armor:(t.armorValue?[{value:t.armorValue,element:t.armorElement}]:[]);
+  if(!armors.length) return rbPill("shield", "#cbd5e1", "-");
+  return armors.map(a=>rbPill("shield", a.element?elc(a.element):"#cbd5e1", a.value, 'armor')).join("");
+}
+function rbToneBg(color){
+  return `background-image:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02)), radial-gradient(circle at 50% 30%, ${color}33 0%, transparent 62%), linear-gradient(180deg,#2a3144,#1a2030); border-color:${color}40;`;
+}
+function regionEnemyTile(t,i,active){
+  const hardshipFx = active ? (g.enc.hardships||[]).filter(h=>h&&h!=="none").map(h=>effectChip(h,{short:true,size:13})) : [];
+  const abilityFx = t.ability ? [effectChip(t.ability,{short:true,size:13})] : [];
+  const tone=elc(t.attackElement || (t.armor&&t.armor[0]?t.armor[0].element:null) || 'water');
+  return `<div class="rb-card rb-enemy ${active?'current':''}">
+    <div class="rb-enemy-wrap">
+      <div class="rb-side-stats">
+        ${rbPill("heart","#fca5a5",t.hp)}
+        ${rbPill("init","#cbd5e1",t.initiative)}
+        ${rbPill("sword",elc(t.attackElement),t.attack)}
+        <div class="rb-armor-group">${rbArmorPills(t)}</div>
+      </div>
+      <div class="rb-art-panel">
+        <div class="rb-art-box" style="${rbToneBg(tone)}">
+          <div class="rb-watermark">${ic("skull",`${tone}66`,50)}</div>
+          ${abilityFx.length?`<div class="rb-art-fx-top-right">${abilityFx.join('')}</div>`:''}
+          ${hardshipFx.length?`<div class="rb-art-fx-left">${hardshipFx.join('')}</div>`:''}
+          <div class="rb-xp-corner">${ic("star","#fcd34d",14)}<span>${t.xp}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+function regionJourneyTile(t,i,active){
+  const hardshipFx = active ? (g.enc.hardships||[]).filter(h=>h&&h!=="none").map(h=>effectChip(h,{short:true,size:12})) : [];
+  const tone=elc(t.mpElement || 'water');
+  return `<div class="rb-card rb-journey ${active?'current':''}">
+    <div class="rb-journey-wrap">
+      <div class="rb-journey-stats">
+        ${rbPill("mountain",elc(t.mpElement),t.mp,'small')}
+        ${rbPill("hourglass","#cbd5e1",t.timePenalty,'small')}
+      </div>
+      <div class="rb-journey-art" style="${rbToneBg(tone)}">
+        ${(t.peril||hardshipFx.length)?`<div class="rb-peril-top">${t.peril?effectChip(t.peril,{short:true,size:12}):''}${hardshipFx.join('')}</div>`:''}
+        <div class="rb-watermark">${ic("mountain",`${tone}66`,34)}</div>
+        <div class="rb-xp-corner right">${ic("star","#fcd34d",11)}<span>${t.xp}</span></div>
+      </div>
+    </div>
+  </div>`;
+}
+function regionBoardHTML(){
+  if(!g.enc || !g.regions || !g.regions[g.regionIdx]) return encHTML();
+  const reg=g.regions[g.regionIdx];
+  return `<div class="region-board">
+    <div class="rb-title">
+      <div class="rb-title-main">${reg.name}</div>
+      <div class="rb-title-sub">Region ${g.regionIdx}</div>
+    </div>
+    <div class="rb-enemies">
+      ${reg.enemies.map((t,i)=>regionEnemyTile(t,i,g.enc.encType==="enemy" && g.enc.target===t)).join("")}
+    </div>
+    <div class="rb-journeys">
+      ${reg.journeys.map((t,i)=>regionJourneyTile(t,i,g.enc.encType==="journey" && g.enc.target===t)).join("")}
+    </div>
+  </div>`;
+}
+
+function viewFor(){
+  switch(g.phase){
+    case "challenge": return regionBoardHTML()+`<div class="btns">
+        <button class="primary" onclick="act()">面對</button>
+        <button class="ghost" onclick="startDivert()" ${g.divertsLeft>0?"":"disabled"}>繞道 (${g.divertsLeft})</button>
+        <button class="ghost" onclick="openHandPreview()">顯示手牌</button>
+      </div>`+(ui.diverting?`<h2>選一張手牌一起棄掉</h2>`+handHTML():"");
+    case "action": {
+      const enemy=g.enc.encType==="enemy";
+      return encHTML()+handHTML(actionPop)+
+        `<div class="action-toolbar">
+          <div class="action-controls">
+            ${enemy?`<div class="boost-switch">
+              <span class="bs-label">B</span>
+              <button class="${ui.bt==='attack'?'on':'ghost'}" onclick="ui.bt='attack';render()">攻</button>
+              <button class="${ui.bt==='initiative'?'on':'ghost'}" onclick="ui.bt='initiative';render()">先</button>
+            </div>`:""}
+            <button class="${ui.fuse?'warn':'ghost'}" onclick="toggleFuse()">融合${ui.fuse?'✓':''}</button>
+            ${flipBtn()}
+            <button class="ghost" onclick="suggest()">建議</button>
+            <button class="ghost" onclick="clearSel()">清除</button>
+          </div>
+          ${actionFuseInfo()}
+          <div class="confirm-row">
+            <button class="primary" onclick="openActionPreview()" ${ui.sel.s!=null?"":"disabled"}>確定行動</button>
+          </div>
+        </div>`;
+    }
+    case "penalty": return penaltyView();
+    case "upgrade": return upgradeView();
+    case "final_journey_intro": return finalView("journey");
+    case "final_enemy_intro": return finalView("enemy");
+    case "gameover":
+      return `<div class="end"><div class="big">${g.result.win?"🏆 勝利！":"💀 失敗"}</div>
+        <div>分數：<b>${g.result.score}</b></div>
+        <div class="btns" style="margin-top:18px"><button class="primary" onclick="newGame()">再玩一局</button></div></div>`;
+  }
+  return "";
+}
+function flipBtn(){return ``;}
+function toggleFlipAll(){ ui.flipped=false; render(); }
+function actionPop(i){
+  const s=ui.sel;
+  if(i===s.s) return {text:"Spell",cls:"rp-s"};
+  if(i===s.e) return {text:"Element",cls:"rp-e"};
+  if(i===s.b) return {text:"Boost",cls:"rp-b"};
+  return null;
+}
+function elementButtons(current, fn){
+  const labels={water:"水",fire:"火",lightning:"雷",shadow:"暗"};
+  return `<div class="elem-row">${["water","fire","lightning","shadow"].map(e=>`<button class="${current===e?'on':'ghost'}" onclick="${fn}('${e}')">${ic(e,elc(e),14)} ${labels[e]}</button>`).join("")}</div>`;
+}
+function actionFuseInfo(){
+  if(!ui.fuse) return "";
+  const s=ui.sel;
+  const roleIdx=new Set([s.s,s.e,s.b].filter(x=>x!=null));
+  let reserveIdx=null; for(let i=0;i<g.hand.length;i++) if(!roleIdx.has(i)){ reserveIdx=i; break; }
+  const top=s.e!=null?g.hand[s.e]:null, bottom=reserveIdx!=null?g.hand[reserveIdx]:null;
+  const labels={water:"水",fire:"火",lightning:"雷",shadow:"暗"};
+  const note='融合：Element 卡 + 預備卡（同元素），再選新元素。';
+  let status='尚未湊齊 Element 卡與預備卡。';
+  if(top&&bottom) status=`目前：${top.name} + ${bottom.name} → ${labels[ui.fuseElement]||'未選'}`;
+  return `<div class="fuse-box"><div class="fuse-note">${note}</div><div class="fuse-now">${status}</div>${elementButtons(ui.fuseElement,'setFuseElement')}</div>`;
+}
+// ---- #1 懲罰：手動選牌擋傷害 ----
+function soakOf(i){const c=g.hand[i];if(!c)return 0;const lv=c.levels[c.level];let s=lv.armorValue;
+  if(lv.armorElement&&g.tx.atkEl&&lv.armorElement===g.tx.atkEl)s*=2;return s;}
+function penTotal(){const r=g.tx.r,tp=r.timePenalty;
+  const shortfall=Math.max(0,tp-g.deck.length);
+  const storm=(g.enc.hardships.includes("storm")&&tp>0)?tp:0;
+  return g.tx.dmg+shortfall+storm;}
+function penaltyPop(i){return ui.dpicks.includes(i)?{text:"−"+soakOf(i),cls:"rp-dmg"}:null;}
+function penaltyView(){
+  const r=g.tx.r,total=penTotal();
+  const head=`<div class="banner">結算：<b>${r.outcome}</b>　XP ${r.xp}　時間懲罰 ${r.timePenalty}　傷害 ${g.tx.dmg}</div>`;
+  if(total<=0) return head+`<div class="muted">${r.timePenalty?`時間懲罰：從牌庫棄 ${Math.min(r.timePenalty,g.deck.length)} 張。`:''}沒有傷害需要吸收。</div>
+    <div class="btns"><button class="primary" onclick="doPenaltyAuto()">繼續</button></div>`;
+  const soaked=ui.dpicks.reduce((s,i)=>s+soakOf(i),0);
+  const remaining=Math.max(0,total-soaked);
+  const noMore=g.hand.every((_,i)=>ui.dpicks.includes(i));
+  const can=remaining<=0||noMore;
+  const elIco=g.tx.atkEl?ic(g.tx.atkEl,elc(g.tx.atkEl),18):'';
+  return head+`<div class="banner">${elIco} 還需吸收 <b style="font-size:1.5em;color:#fca5a5">${remaining}</b> <span class="muted">／ 共 ${total}</span></div>
+    <div class="muted">點手牌降級吸收（盾值；元素相符雙倍）。歸 0 後不能再選；吸不完則被擊倒。</div>
+    ${handHTML(penaltyPop)}
+    <div class="btns">
+      ${flipBtn()}
+      <button class="ghost" onclick="ui.dpicks=[];render()">清除</button>
+      <button class="ghost" onclick="doPenaltyAuto()">自動吸收</button>
+      <button class="primary" ${can?'':'disabled'} onclick="doPenaltyConfirm()">確定</button>
+    </div>`;
+}
+// ---- #2 升級：彈窗 + XP 扣抵 ----
+function upgradePop(i){
+  if(ui.flash&&ui.flash.idx===i) return {text:ui.flash.text,cls:ui.flash.cls};
+  return ui.upicks.includes(i)?{text:"Selected →L"+ui.upLevels[i],cls:"rp-up"}:null;
+}
+function upgradeView(){
+  const xp=g.tx.r.xp;
+  if(xp<=0) return `<div class="banner">沒有 XP，直接清理。</div>
+    <div class="btns"><button class="primary" onclick="finishUpgrade([])">繼續</button></div>`;
+  const remaining=xp-ui.upSpent;
+  return `<div class="banner">升級階段：可用 XP <b>${remaining}</b> / ${xp}</div>
+    <div class="muted">點手牌升級（扣 XP；本遭遇被降級的卡不能立刻升級）。已升 ${ui.upicks.length} 次</div>
+    ${handHTML(upgradePop)}
+    <div class="btns">
+      ${flipBtn()}
+      <button class="ghost" onclick="suggestUpgrade()">建議</button>
+      <button class="ghost" onclick="clearUpgrade()">清除</button>
+      <button class="primary" onclick="finishUpgrade(ui.upicks)">完成升級</button>
+    </div>`;
+}
+// ---- #3 龍戰：手動兩組 ----
+function finalSlotOf(i){const S=ui.fsel.sets;
+  for(let k=0;k<2;k++){if(S[k].s===i)return[k,"法"];if(S[k].e===i)return[k,"元"];if(S[k].b===i)return[k,"B"];}
+  return null;}
+function finalPop(i){const r=finalSlotOf(i);if(!r)return null;
+  return {text:"組"+(r[0]+1)+"·"+r[1],cls:r[0]===0?"rp-s":"rp-e"};}
+function finalView(kind){
+  const isJ=kind==="journey";
+  const ready=ui.fsel.sets.some(s=>s.s!=null);
+  if(ui.regroup) return dragonHTML()+`<h2>選一張棄掉並重抽 7 張</h2>`+handHTML();
+  return dragonHTML()
+    +`<h2>${isJ?"最終旅程：組兩組行動（求移動）":"最終敵人：組兩組行動（求攻擊）"}</h2>`
+    +`<div class="muted">點卡片循環指派：組1法→組1元→組1B→組2法→組2元→組2B→取消</div>`
+    +handHTML(finalPop)
+    +`<div class="btns">
+        ${(isJ&&!g.regroupUsed)?`<button class="warn" onclick="startRegroup()">Regroup</button>`:""}
+        ${flipBtn()}
+        <button class="ghost" onclick="suggestFinal('${kind}')">建議</button>
+        <button class="ghost" onclick="clearFinal()">清除</button>
+        <button class="primary" ${ready?'':'disabled'} onclick="confirmFinal('${kind}')">確定結算</button>
+      </div>`
+    + finalFuseInfo();
+}
+function finalFuseInfo(){
+  if(!ui.fsel) return "";
+  const fs=ui.fsel;
+  const used=new Set(); fs.sets.forEach(st=>[st.s,st.e,st.b].forEach(x=>{if(x!=null)used.add(x);}));
+  let reserveIdx=null; for(let i=0;i<g.hand.length;i++) if(!used.has(i)){ reserveIdx=i; break; }
+  const buttons=`<div class="btns"><button class="${fs.fuseSet==null?'on':'ghost'}" onclick="setFinalFuse(null)">不融合</button><button class="${fs.fuseSet===0?'warn':'ghost'}" onclick="setFinalFuse(0)">融合組1</button><button class="${fs.fuseSet===1?'warn':'ghost'}" onclick="setFinalFuse(1)">融合組2</button></div>`;
+  if(fs.fuseSet==null) return buttons;
+  const st=fs.sets[fs.fuseSet];
+  const top=st&&st.e!=null?g.hand[st.e]:null, bottom=reserveIdx!=null?g.hand[reserveIdx]:null;
+  let msg=`融合：組${fs.fuseSet+1} 的 Element 角色作上方卡，未指派卡作下方卡；兩張必須同元素。`;
+  if(top&&bottom) msg+=`<br>目前：${top.name}(${top.cardElement}) + ${bottom.name}(${bottom.cardElement}) → ${fs.fuseElement||'未選元素'}`;
+  else msg+=`<br>目前缺少該組 Element 或未指派卡，不能融合。`;
+  return buttons+`<div class="muted">${msg}</div>`+elementButtons(fs.fuseElement,'setFinalFuseElement');
+}
+function dragonHTML(){
+  const d=g.dragon;
+  const arm=d.armor.map(a=>chip("shield",elc(a.element),a.value)).join("");
+  const mp=d.mpTiers.map(t=>`<span class="tier">${chip("mountain",elc(t[1]),t[0])}${chip("hourglass","#cbd5e1",t[2])}</span>`).join("");
+  const hp=d.hpTiers.map(t=>`<span class="tier">${chip("heart","#fca5a5",t[0])}${chip("sword",elc(t[1].element),t[1].value)}</span>`).join("");
+  return `<div class="enc"><div class="nm">🐲 ${d.name}</div>
+    <div class="chips big">${chip("init","#cbd5e1",d.initiative)}
+      ${chip("boost","#fca5a5",d.earlyDamage.value)}${ic(d.earlyDamage.element,elc(d.earlyDamage.element),14)}
+      ${arm}</div>
+    <div class="muted" style="margin-top:4px">最終旅程 MP</div><div class="chips">${mp}</div>
+    <div class="muted" style="margin-top:4px">最終敵人 HP</div><div class="chips">${hp}</div></div>`;
+}
+
+
+function levelPreviewCardHTML(c,L){
+  const current=L===c.level;
+  const cls=EL[c.cardElement];
+  return `<div class="level-card ${cls} ${current?'current':''}">
+    <div class="level-title"><span>${ic(c.cardElement,elc(c.cardElement),17)} L${L}</span>${current?'<span class="current-tag">目前</span>':''}</div>
+    ${cardStatsBlock(c,L,{mini:true})}
+    <div class="level-note">${levelCostNote(c,L)}</div>
+  </div>`;
+}
+
+function legendModalHTML(){
+  if(!ui.legendOpen) return "";
+  return `<div class="preview-overlay" onclick="closeLegend()">
+    <div class="preview-modal" onclick="event.stopPropagation()">
+      <div class="preview-head">
+        <div class="preview-title">圖示 / 說明</div>
+        <button class="preview-close" type="button" onclick="closeLegend()">×</button>
+      </div>
+      <div id="legend">${LEGEND_HTML}</div>
+    </div>
+  </div>`;
+}
+function toggleLegend(){ ui.legendOpen=!ui.legendOpen; render(); }
+function closeLegend(){ ui.legendOpen=false; render(); }
+
+
+function handPreviewCardHTML(c,i){
+  const cls=EL[c.cardElement];
+  const L=c.level;
+  return `<div class="card ${cls}">
+    <div class="card-head">
+      <div style="min-width:0;flex:1 1 auto">
+        <div class="card-title"><span class="level-badge">L${L}</span>${ic(c.cardElement,elc(c.cardElement),20)}<span title="${c.name}">${shortName(c.name)}</span></div>
+      </div>
+    </div>
+    ${cardStatsBlock(c,L)}
+  </div>`;
+}
+function handPreviewHTML(){
+  if(!ui.handPreviewOpen) return "";
+  return `<div class="preview-overlay" onclick="closeHandPreview()">
+    <div class="preview-modal">
+      <div class="preview-head">
+        <div class="preview-title">目前手牌</div>
+        <button class="preview-close" type="button">×</button>
+      </div>
+      <div class="hand-preview-grid">
+        ${g.hand.map((c,i)=>handPreviewCardHTML(c,i)).join("")}
+      </div>
+      <div class="preview-foot">點任意處關閉，不會改變遊戲狀態</div>
+    </div>
+  </div>`;
+}
+function openHandPreview(){ ui.handPreviewOpen=true; render(); }
+function closeHandPreview(){ ui.handPreviewOpen=false; render(); }
+
+function previewHTML(){
+  if(ui.previewIdx==null || !g.hand[ui.previewIdx]) return "";
+  const c=g.hand[ui.previewIdx];
+  return `<div class="preview-overlay" onclick="closePreview()">
+    <div class="preview-modal">
+      <div class="preview-head">
+        <div class="preview-title">${c.name}｜四個等級預覽</div>
+        <button class="preview-close" type="button">×</button>
+      </div>
+      <div class="preview-grid">
+        ${[1,2,3,4].map(L=>levelPreviewCardHTML(c,L)).join("")}
+      </div>
+      <div class="preview-foot">點任意處關閉，不會改變卡片等級</div>
+    </div>
+  </div>`;
+}
+function openPreview(i){ ui.previewIdx=i; ui.justPreview=true; render(); }
+function closePreview(){ ui.previewIdx=null; ui.justPreview=false; render(); }
+
+// ---- 互動 ----
+function bindCards(){
+  document.querySelectorAll(".card[data-i]").forEach(el=>{
+    const idx=parseInt(el.dataset.i,10);
+    let timer=null;
+    let armed=false;
+    let suppressClick=false;
+    const clear=()=>{ if(timer){ clearTimeout(timer); timer=null; } };
+    el.onpointerdown=(ev)=>{
+      if(ev.pointerType==="mouse" && ev.button!==0) return;
+      armed=false;
+      clear();
+      timer=setTimeout(()=>{ armed=true; },520);
+    };
+    el.onpointerup=(ev)=>{
+      clear();
+      if(armed){
+        suppressClick=true;
+        armed=false;
+        ev.preventDefault();
+        openPreview(idx);
+        setTimeout(()=>{ suppressClick=false; },80);
+      }
+    };
+    el.onpointercancel=clear;
+    el.onpointerleave=clear;
+    el.onclick=(ev)=>{
+      if(suppressClick){ ev.preventDefault(); return; }
+      cardTap(idx);
+    };
+  });
+}
+function toggleFlipAll(){ ui.flipped=false; render(); }
+function cardTap(i){
+  if(ui.flipped){ return; }   // 背面只供檢視，要選請先翻回正面
+  if(g.phase==="action"){
+    const s=ui.sel;
+    if(i===s.s){s.s=null;} else if(i===s.e){s.e=null;} else if(i===s.b){s.b=null;}
+    else if(s.s===null)s.s=i; else if(s.e===null)s.e=i; else if(s.b===null)s.b=i;
+    render();
+  } else if(g.phase==="challenge" && ui.diverting){
+    g.divert(i); ui.diverting=false; render();
+  } else if(g.phase==="penalty"){
+    const total=penTotal();
+    const soaked=ui.dpicks.reduce((s,j)=>s+soakOf(j),0);
+    if(total>0 && (total-soaked)>0 && !ui.dpicks.includes(i)) ui.dpicks.push(i);  // 吸滿後不能再選
+    render();
+  } else if(g.phase==="upgrade"){
+    tryUpgrade(i);
+  } else if(g.phase==="final_journey_intro"||g.phase==="final_enemy_intro"){
+    if(ui.regroup){ ui.regroup=false; g.regroup(i); resetFinalSel(); afterFinal(); return; }
+    cycleFinal(i); render();
+  }
+}
+function act(){ ui.sel={s:null,e:null,b:null}; ui.fuse=false; ui.fuseElement=null; ui.negateRanged=true; ui.flipped=false; g.toAction(); render(); }
+function startDivert(){ ui.handPreviewOpen=false; ui.diverting=true; render(); }
+function toggleFuse(){ ui.fuse=!ui.fuse; if(ui.fuse && !ui.fuseElement && ui.sel.s!=null) ui.fuseElement=curLevel(g.hand[ui.sel.s]).enhanced.element; render(); }
+function setFuseElement(e){ ui.fuseElement=e; render(); }
+function clearSel(){ ui.sel={s:null,e:null,b:null}; ui.fuse=false; ui.fuseElement=null; render(); }
+function suggest(){
+  const [s,e,b,t]=DOEGame.bestAssignment(g.hand,g.enc.encType,g.enc.target,g.enc.hardships);
+  ui.sel={s,e:e,b:b}; if(g.enc.encType==="enemy")ui.bt=t==="initiative"?"initiative":"attack"; render();
+}
+
+function buildActionPayload(){
+  const s=ui.sel; const enemy=g.enc.encType==="enemy";
+  if(s.s==null || !g.hand[s.s]) return {ok:false,reason:"必須指定 Spell 卡"};
+  const usedArr=[s.s,s.e,s.b].filter(x=>x!=null);
+  if(new Set(usedArr).size!==usedArr.length) return {ok:false,reason:"同一張卡不能同時擔任多個角色"};
+  const used=new Set(usedArr);
+  let reserveIdx=null; for(let i=0;i<g.hand.length;i++) if(!used.has(i)){ reserveIdx=i; break; }
+  const hasReserve=reserveIdx!=null;
+  let fuse=false, fusedElement=null, reserveCard=hasReserve?g.hand[reserveIdx]:null;
+  if(ui.fuse){
+    fusedElement=ui.fuseElement || (s.s!=null?curLevel(g.hand[s.s]).enhanced.element:null);
+    const vf=DOEGame.validateFuse(g.hand,s.e,reserveIdx,fusedElement);
+    if(!vf.ok) return {ok:false,reason:vf.reason};
+    fuse=true; reserveCard=null;
+  }
+  const a={s:s.s,e:s.e,b:s.b,t:enemy?ui.bt:"move",negateRanged:enemy&&g.enc.target.ability==="ranged"&&ui.negateRanged&&hasReserve&&!fuse,fuse,fusedElement};
+  const set=DOEGame.buildSet(g.hand,a.s,a.e,a.b,a.t,fusedElement);
+  return {ok:true,a,set,reserveIdx,reserveCard,fuse,fusedElement};
+}
+function fmtNum(n){ return n==null?'—':String(n); }
+function metricRow(icon,color,label,formula,total){
+  return `<div class="ap-row"><div class="left">${ic(icon,color,17)}<span>${label}</span></div><div class="mid">${formula||''}</div><b>${fmtNum(total)}</b></div>`;
+}
+function effectLines(log){
+  return (log||[]).filter(l=>/(觸發|啟用|未觸發|護甲|Reserve Boost|強化)/.test(l)).slice(0,8);
+}
+function calcActionPreview(payload){
+  const enc=g.enc, enemy=enc.encType==="enemy", t=enc.target, set=payload.set, a=payload.a;
+  const elem=DOEEngine.elementOf(set);
+  const picked=DOEEngine.pickAction(set.spell, elem);
+  const action=picked[0], used=picked[1];
+  const initBase=set.element?curLevel(set.element).initiative:0;
+  const rawBoost=set.boost?curLevel(set.boost).boost:0;
+  const boost=enc.hardships.includes("night_travel")?Math.max(0,rawBoost-initBase):rawBoost;
+  const enhanced=used==="enhanced";
+  let result, rows='', targetRows='', effects=[], outcome='', xp=0, time=0, damage=0;
+  if(enemy){
+    const baseAtk=DOEEngine.actionValue(action,"attack");
+    const baseMove=DOEEngine.actionValue(action,"move");
+    const initFinal=a.t==="initiative"?initBase+boost:initBase;
+    let atk=a.t==="initiative"?baseAtk:baseAtk+boost;
+    let armorHit=0;
+    const isEnhAttack=enhanced && DOEEngine.actionSupports(action,"attack");
+    const atkElem=isEnhAttack?curLevel(set.spell).enhanced.element:null;
+    const armors=(t.armor&&t.armor.length)?t.armor:(t.armorValue?[{value:t.armorValue,element:t.armorElement}]:[]);
+    if(isEnhAttack){
+      for(const ar of armors){ if(ar.element&&ar.element===atkElem){ armorHit=ar.value; break; } }
+    }
+    const atkAfter=Math.max(0,atk-armorHit);
+    const moveVal=baseMove;
+    const useMove=t.ability==="slow" && moveVal>atkAfter;
+    result=DOEEngine.resolveEnemy(set,t,enc.hardships,{negateRanged:a.negateRanged});
+    outcome=result.outcome; xp=result.xp; time=result.timePenalty; damage=result.damageEarly+result.damageCombat;
+    rows+=metricRow("init","#cbd5e1","先攻",a.t==="initiative"?`${initBase}+${boost}`:`${initBase}`,initFinal);
+    rows+=metricRow("sword",atkElem?elc(atkElem):"#cbd5e1",enhanced?"強化攻擊":"攻擊",armorHit?`${baseAtk}${a.t==='attack'?`+${boost}`:''}-${armorHit}`:`${baseAtk}${a.t==='attack'?`+${boost}`:''}`,atkAfter);
+    if(t.ability==="slow") rows+=metricRow("boot","#cbd5e1","Slow 可用移動",`${baseMove}`,moveVal);
+    targetRows+=metricRow("heart","#fca5a5","HP","",t.hp);
+    targetRows+=metricRow("init","#cbd5e1","敵先攻","",t.initiative);
+    targetRows+=metricRow("sword",elc(t.attackElement),"敵攻擊","",t.attack);
+    const armorTxt=armors.map(ar=>`${ar.value}`).join('/');
+    targetRows+=metricRow("shield",armors[0]?elc(armors[0].element):"#cbd5e1","護甲","",armorTxt);
+  } else {
+    const baseMove=DOEEngine.actionValue(action,"move");
+    const isEnhMove=enhanced && DOEEngine.actionSupports(action,"move");
+    const reserveBoost=payload.reserveCard?curLevel(payload.reserveCard).boost:0;
+    const reserveAdd=(isEnhMove&&curLevel(set.spell).enhanced.element===t.mpElement&&reserveBoost)?reserveBoost:0;
+    const mpAdd=(t.peril==="steep"&&reserveBoost)?reserveBoost:0;
+    const moveTotal=baseMove+boost+reserveAdd;
+    const mpTotal=t.mp+mpAdd;
+    result=DOEEngine.resolveJourney(set,t,enc.hardships,{reserve:payload.reserveCard});
+    outcome=result.outcome; xp=result.xp; time=result.timePenalty; damage=result.damageOther;
+    rows+=metricRow("boot",isEnhMove?elc(curLevel(set.spell).enhanced.element):"#cbd5e1",enhanced?"強化移動":"移動",`${baseMove}+${boost}${reserveAdd?`+${reserveAdd}`:''}`,moveTotal);
+    targetRows+=metricRow("mountain",elc(t.mpElement),"MP",mpAdd?`${t.mp}+${mpAdd}`:'',mpTotal);
+    targetRows+=metricRow("hourglass","#cbd5e1","時間懲罰","",t.timePenalty);
+  }
+  const stormExtra=(enc.hardships.includes("storm")&&time>0)?time:0;
+  const shortfall=Math.max(0,time-g.deck.length);
+  const finalDamage=damage+stormExtra+shortfall;
+  effects=effectLines(result.log);
+  return {enemy,rows,targetRows,effects,outcome,xp,time,damage:finalDamage,result,enhanced};
+}
+
+function rangedPreviewControl(p){
+  if(g.enc.encType!=="enemy" || g.enc.target.ability!=="ranged") return "";
+  const can = p.reserveIdx!=null && !p.fuse;
+  const on = !!p.a.negateRanged;
+  const label = can ? (on ? "棄預備忽略" : "不忽略") : "無預備卡";
+  return `<div class="ranged-option">
+    <div class="left">${effectChip("ranged",{short:true})}<span>${can?"可棄預備卡忽略 Early Damage":"沒有可用預備卡，不能忽略"}</span></div>
+    <button class="${on?'warn':'ghost'}" ${can?'':'disabled'} onclick="toggleRangedPreview()">${label}</button>
+  </div>`;
+}
+function toggleRangedPreview(){
+  ui.negateRanged=!ui.negateRanged;
+  const payload=buildActionPayload();
+  if(payload.ok){
+    payload.data=calcActionPreview(payload);
+    ui.actionPreview=payload;
+  }
+  render();
+}
+
+function actionPreviewHTML(){
+  const p=ui.actionPreview; if(!p) return "";
+  const d=p.data;
+  const enc=g.enc, t=enc.target;
+  const resultClass=d.outcome==="完全勝利"?"rp-up":(d.outcome==="失敗"?"rp-warn":"rp-b");
+  return `<div class="preview-overlay" onclick="closeActionPreview()">
+    <div class="action-modal" onclick="event.stopPropagation()">
+      <div class="preview-head"><div class="preview-title">行動預覽</div><button class="preview-close" type="button" onclick="closeActionPreview()">×</button></div>
+      <div class="ap-section"><div class="ap-title">你的總數值</div>${d.rows}</div>
+      <div class="ap-section"><div class="ap-title">對象數值${(t.ability||t.peril||enc.hardships.length)?`　${t.ability?effectChip(t.ability,{short:true}):''}${t.peril?effectChip(t.peril,{short:true}):''}${effectsHTML(enc.hardships,{short:true})}`:''}</div>${d.targetRows}</div>
+      ${rangedPreviewControl(p)}
+      ${d.effects.length?`<div class="ap-section"><div class="ap-title">特殊效果</div><div class="ap-effects">${d.effects.map(x=>`<div class="ap-effect">${x}</div>`).join('')}</div></div>`:''}
+      <div class="ap-section"><div class="ap-title">結果</div>
+        <div class="ap-row"><div class="left"><span class="ap-result ${resultClass}">${d.outcome}</span></div><div class="mid"></div><b></b></div>
+        ${metricRow("star","#fcd34d","XP","",`+${d.xp}`)}
+        ${metricRow("hourglass","#cbd5e1","時間","",d.time)}
+        ${metricRow("heart","#fca5a5","傷害","",d.damage)}
+      </div>
+      <div class="ap-buttons"><button class="ghost" onclick="closeActionPreview()">取消</button><button class="primary" onclick="executeActionPreview()">確定</button></div>
+    </div>
+  </div>`;
+}
+function openActionPreview(){
+  const payload=buildActionPayload();
+  if(!payload.ok){ alert(payload.reason); return; }
+  payload.data=calcActionPreview(payload);
+  ui.actionPreview=payload;
+  render();
+}
+function closeActionPreview(){ ui.actionPreview=null; render(); }
+function executeActionPreview(){
+  const p=ui.actionPreview;
+  if(!p) return;
+  g.resolveAction(p.a);
+  ui.actionPreview=null;
+  ui.sel={s:null,e:null,b:null}; ui.fuse=false; ui.fuseElement=null; ui.dpicks=[];
+  render();
+}
+function confirmAction(){ openActionPreview(); }
+// 懲罰
+function initUpgrade(){ ui.upicks=[]; ui.upSpent=0; ui.upLevels=g.hand.map(c=>c.level); ui.flipped=false; }
+function doPenaltyAuto(){ g.applyPenalty(null); initUpgrade(); render(); }
+function doPenaltyConfirm(){ g.applyPenalty(ui.dpicks); initUpgrade(); render(); }
+// 升級
+function flash(idx,text,cls){ ui.flash={idx,text,cls}; render();
+  setTimeout(()=>{ if(ui.flash&&ui.flash.idx===idx){ ui.flash=null; render(); } },1000); }
+function tryUpgrade(i){
+  const cur=ui.upLevels[i];
+  if(cur>=4){ flash(i,"已滿級","rp-warn"); return; }
+  if(g.hand[i]._downgradedThisEncounter){ flash(i,"本回合降級","rp-warn"); return; }
+  const cost=g.hand[i].levels[cur].upgradeCost;
+  const remaining=g.tx.r.xp-ui.upSpent;
+  if(cost<=remaining){ ui.upicks.push(i); ui.upSpent+=cost; ui.upLevels[i]++; render(); }
+  else{ flash(i,"No XP","rp-warn"); }
+}
+function suggestUpgrade(){ clearUpgrade(); for(const i of DOEGame.chooseUpgrades(g.hand,g.tx.r.xp)) tryUpgrade(i); }
+function clearUpgrade(){ initUpgrade(); render(); }
+function finishUpgrade(picks){ g.applyUpgrade(picks); afterTurn(); }
+function afterTurn(){ if(g.phase==="penalty") ui.dpicks=[]; render(); }
+// 最終戰
+function resetFinalSel(){ ui.fsel={sets:[{s:null,e:null,b:null},{s:null,e:null,b:null}],fuseSet:null,fuseElement:null}; }
+function cycleFinal(i){
+  const S=ui.fsel.sets, slots=[[0,'s'],[0,'e'],[0,'b'],[1,'s'],[1,'e'],[1,'b']];
+  for(const [k,key] of slots){ if(S[k][key]===i){ S[k][key]=null; return; } }
+  for(const [k,key] of slots){ if(S[k][key]==null){ S[k][key]=i; return; } }
+}
+function suggestFinal(kind){
+  const r=DOEGame.makeTwoSetsIdx(g.hand, kind==="journey"?"move":"attack");
+  resetFinalSel();
+  r.sets.forEach((st,k)=>{ ui.fsel.sets[k]={s:st.s,e:st.e==null?null:st.e,b:st.b==null?null:st.b}; });
+  render();
+}
+function clearFinal(){ resetFinalSel(); render(); }
+function setFinalFuse(k){ if(!ui.fsel) resetFinalSel(); ui.fsel.fuseSet=k; if(k!=null && !ui.fsel.fuseElement){ const st=ui.fsel.sets[k]; if(st&&st.s!=null) ui.fsel.fuseElement=curLevel(g.hand[st.s]).enhanced.element; } render(); }
+function setFinalFuseElement(e){ if(!ui.fsel) resetFinalSel(); ui.fsel.fuseElement=e; render(); }
+function startRegroup(){ ui.regroup=true; render(); }
+function confirmFinal(kind){
+  const t=kind==="journey"?"move":"attack";
+  const allSets=ui.fsel.sets;
+  const sets=allSets.filter(s=>s.s!=null).map(s=>({s:s.s,e:s.e,b:s.b,t}));
+  const used=new Set(); allSets.forEach(s=>[s.s,s.e,s.b].forEach(x=>{if(x!=null)used.add(x);}));
+  let reserveIdx=null; for(let i=0;i<g.hand.length;i++) if(!used.has(i)){ reserveIdx=i; break; }
+  let fuseSetIndex=null;
+  if(ui.fsel.fuseSet!=null){
+    const k=ui.fsel.fuseSet;
+    const activeSets=allSets.filter(s=>s.s!=null);
+    if(!activeSets[k]){ alert("融合組別尚未完成指定"); return; }
+    const fusedElement=ui.fsel.fuseElement || curLevel(g.hand[activeSets[k].s]).enhanced.element;
+    const vf=DOEGame.validateFuse(g.hand,activeSets[k].e,reserveIdx,fusedElement);
+    if(!vf.ok){ alert(vf.reason); return; }
+    activeSets[k].fusedElement=fusedElement; fuseSetIndex=k;
+    sets[k].fusedElement=fusedElement;
+  }
+  if(kind==="journey"){ g.finalJourneyResolve({sets,reserveIdx,fuseSetIndex}); resetFinalSel(); }
+  else { g.finalEnemyResolve({sets,reserveIdx,fuseSetIndex}); }
+  afterFinal();
+}
+function afterFinal(){ render(); }
+
+function setHint(){
+  const h=document.getElementById("hint");
+  if(!h) return;
+  const map={
+    challenge:"面對遭遇，或繞道（棄關鍵卡+1手牌）",
+    action:"指派卡片，其餘為預備；融合=Element卡+未指派卡同元素，並選新元素",
+    penalty:"點手牌降級吸收傷害（剩餘歸0），或自動吸收",
+    upgrade:"點手牌升級（扣XP，不夠會提示）；或用建議",
+    final_journey_intro:"循環點卡指派兩組行動（求移動），可先 Regroup",
+    final_enemy_intro:"循環點卡指派兩組行動（求攻擊），對龍最後一擊",
+    gameover:"看看分數，再玩一局！",
+  };
+  h.textContent=map[g.phase]||"";
+}
+
+try { newGame(); }
+catch(e){
+  document.getElementById('sub').textContent='發生錯誤';
+  document.getElementById('main').innerHTML='<div class="banner">啟動失敗：'+(e&&e.message||e)+'</div>';
+}
+</script>
+</body>
+</html>
