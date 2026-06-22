@@ -190,11 +190,207 @@
   .ap-row:first-of-type{border-top:0}.ap-row .left{display:flex;align-items:center;gap:6px;min-width:0}.ap-row .mid{color:var(--muted);font-size:12px;flex:1;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ap-row b{font-size:18px;white-space:nowrap}.ap-result{font-size:18px;font-weight:900}.ap-effects{display:flex;flex-direction:column;gap:4px}.ap-effect{font-size:12px;color:#cdd3ea;background:#00000020;border:1px solid #ffffff10;border-radius:8px;padding:5px 7px;line-height:1.35}.ap-buttons{display:flex;gap:8px;margin-top:10px}.ap-buttons button{flex:1}
 
 
+
+  .start-screen{
+    min-height:calc(100svh - 70px);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:18px;
+    padding:0 4px 34px;
+  }
+  .start-title{
+    text-align:center;
+    font-size:30px;
+    line-height:1.05;
+    font-weight:950;
+    letter-spacing:.4px;
+    color:#f8fafc;
+    text-shadow:0 4px 22px #000b;
+  }
+  .start-subtitle{
+    text-align:center;
+    margin-top:-10px;
+    font-size:13px;
+    font-weight:700;
+    color:#aeb8d4;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+  }
+  .start-art{
+    position:relative;
+    min-height:230px;
+    border:1px solid #ffffff18;
+    border-radius:22px;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 52% 30%, rgba(250,204,21,.18), transparent 26%),
+      radial-gradient(circle at 30% 70%, rgba(59,130,246,.20), transparent 34%),
+      linear-gradient(180deg,#30374f 0%,#171c2b 52%,#0b0e18 100%);
+    box-shadow:inset 0 1px 0 #ffffff18, 0 18px 60px #0007;
+  }
+  .start-art::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(180deg,transparent 0 55%,rgba(0,0,0,.36) 100%),
+      radial-gradient(circle at 50% 10%,rgba(255,255,255,.12),transparent 38%);
+  }
+  .start-dragon{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:.96;
+  }
+  .start-dragon svg{
+    width:112px;
+    height:112px;
+    filter:drop-shadow(0 12px 30px rgba(0,0,0,.45));
+  }
+  .start-art-label{
+    position:absolute;
+    left:14px;
+    right:14px;
+    bottom:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    color:#dbe4ff;
+    font-size:12px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    opacity:.92;
+  }
+  .start-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .start-actions button{
+    min-height:54px;
+    font-size:17px;
+    font-weight:900;
+  }
+  .start-save-note{
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    margin-top:-4px;
+  }
+
+
+  .start-title{
+    white-space:nowrap;
+    font-size:clamp(24px,7.2vw,34px);
+    line-height:1.05;
+  }
+  .start-subtitle{
+    margin-top:8px;
+    letter-spacing:.16em;
+  }
+  .start-dragon-options{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+    margin-top:-2px;
+  }
+  .dragon-choice{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    min-height:42px;
+    padding:8px 10px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:#101525;
+    color:var(--txt);
+    font-size:13px;
+    font-weight:850;
+  }
+  .dragon-choice.on{
+    border-color:#facc15aa;
+    background:rgba(250,204,21,.10);
+    box-shadow:0 0 0 2px rgba(250,204,21,.18) inset;
+  }
+
+
+  body.start-mode{
+    min-height:100dvh;
+    overflow:hidden;
+  }
+  body.start-mode #app{
+    min-height:100dvh;
+    padding:0 18px;
+    display:grid;
+    place-items:center;
+  }
+  body.start-mode #main{
+    width:100%;
+  }
+  body.start-mode .start-screen{
+    width:100%;
+    min-height:auto;
+    padding:0;
+    justify-content:center;
+  }
+
+
+  body.challenge-mode #app{
+    padding-bottom:14px;
+  }
+
+
+  .divert-head{
+    justify-content:center;
+    padding:0 2px 6px;
+    margin-bottom:6px;
+  }
+  .divert-title{
+    width:100%;
+    text-align:center;
+    font-size:16px;
+  }
+  .divert-note{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.25;
+    margin:4px 2px;
+    text-align:center;
+  }
+  .divert-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+    align-items:stretch;
+  }
+  .divert-grid .card{
+    cursor:pointer;
+  }
+  .divert-grid .card.sel{
+    outline:2px solid #facc15;
+    background:var(--panel2);
+    box-shadow:0 0 0 2px rgba(250,204,21,.20) inset;
+  }
+  .divert-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px solid #ffffff12;
+  }
+
 </style>
 </head>
 <body>
 <div id="app">
-  <div class="top">
+  <div class="top" id="topbar">
     <div style="min-width:0;flex:1"><b>Dragons of Etchinstone</b><div class="muted" id="sub">準備中…</div></div>
     <div class="top-right">
       <button class="tool-btn" type="button" onclick="toggleLegend()">說明</button>
@@ -202,7 +398,7 @@
     </div>
   </div>
   <div id="main"></div>
-  <h2>紀錄</h2>
+  <h2 id="logTitle">紀錄</h2>
   <div id="log"></div>
 </div>
 
@@ -1058,6 +1254,109 @@ function actChip(action,color){
 let g, ui;
 const curLevel = DOEEngine.curLevel;
 
+const SAVE_KEY = "doe_auto_save_v1";
+
+function defaultUI(){
+  return {
+    startScreen:true,
+    startDragon:"Red Dragon",
+    sel:{s:null,e:null,b:null},
+    bt:"attack",
+    fuse:false,
+    fuseElement:null,
+    negateRanged:true,
+    diverting:false,
+    flipped:false,
+    dpicks:[],
+    upicks:[],
+    upSpent:0,
+    upLevels:[],
+    flash:null,
+    regroup:false,
+    fsel:{sets:[{s:null,e:null,b:null},{s:null,e:null,b:null}]},
+    previewIdx:null,
+    justPreview:false,
+    handPreviewOpen:false,
+    divertPick:null,
+    actionPreview:null,
+    legendOpen:false
+  };
+}
+
+const START_DRAGONS=["Red Dragon","Yellow Dragon","Blue Dragon","Gray Dragon"];
+function dragonColor(name){
+  return {"Red Dragon":elc("fire"),"Yellow Dragon":elc("lightning"),"Blue Dragon":elc("water"),"Gray Dragon":elc("shadow")}[name] || "#f8fafc";
+}
+function dragonShort(name){
+  return String(name||"").replace(" Dragon","");
+}
+function selectStartDragon(name){
+  if(!ui) ui=defaultUI();
+  ui.startDragon=name;
+  render();
+}
+
+function hasSave(){
+  try{return !!localStorage.getItem(SAVE_KEY);}catch(e){return false;}
+}
+function autoSave(){
+  if(!g || !ui || ui.startScreen) return;
+  try{
+    localStorage.setItem(SAVE_KEY, JSON.stringify({
+      version:1,
+      savedAt:Date.now(),
+      game:g
+    }));
+  }catch(e){
+    console.warn("Auto save failed", e);
+  }
+}
+function continueGame(){
+  try{
+    const raw=localStorage.getItem(SAVE_KEY);
+    if(!raw){ alert("目前沒有存檔"); return; }
+    const data=JSON.parse(raw);
+    if(!data || data.version!==1 || !data.game){ alert("存檔格式不正確"); return; }
+    const seed=data.game.saveSeed || 1;
+    const dragonId=(data.game.dragonId || (data.game.dragon && data.game.dragon.name) || "Red Dragon");
+    g=Object.assign(new DOEGame.WebGame(seed,dragonId), data.game);
+    ui=defaultUI();
+    ui.startScreen=false;
+    buildLegend();
+    render();
+  }catch(e){
+    console.warn("Auto load failed", e);
+    alert("讀取存檔失敗");
+  }
+}
+function startNewGame(){
+  if(hasSave() && !confirm("目前有進行中的遊戲，確定要重新開始嗎？")) return;
+  try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
+  newGame(null, ui.startDragon || "Red Dragon");
+}
+function startHTML(){
+  const canContinue=hasSave();
+  const selected=(ui&&ui.startDragon)||"Red Dragon";
+  const choices=START_DRAGONS.map(d=>`<button class="dragon-choice ${d===selected?'on':''}" onclick="selectStartDragon('${d}')">${ic("skull",dragonColor(d),15)}${dragonShort(d)}</button>`).join("");
+  return `<div class="start-screen">
+    <div>
+      <div class="start-title">Dragons of Etchinstone</div>
+      <div class="start-subtitle">Solo Card Adventure</div>
+    </div>
+    <div class="start-art" aria-hidden="true">
+      <div class="start-dragon">${ic("skull",dragonColor(selected),112)}</div>
+      <div class="start-art-label"><span>${selected}</span><span>Offline Save</span></div>
+    </div>
+    <div class="start-dragon-options">${choices}</div>
+    <div class="start-actions">
+      <button class="primary" onclick="startNewGame()">新遊戲</button>
+      <button class="ghost" onclick="continueGame()" ${canContinue?"":"disabled"}>繼續</button>
+    </div>
+    <div class="start-save-note">${canContinue?"偵測到本機存檔，可繼續上次進度。":"尚無本機存檔，請選擇對手龍並開始新遊戲。"}</div>
+  </div>`;
+}
+
+
 function normEffect(e){ return (e && e !== "none") ? e : null; }
 function effectMeta(e){
   const M={
@@ -1116,12 +1415,16 @@ function buildLegend(){
     section("旅程危險 / Peril", `<div class="legend-rule-list">${["steep","treacherous"].map(ruleItem).join("")}</div>`);
   if(el) el.innerHTML=LEGEND_HTML;
 }
-function newGame(seed){
-  g=new DOEGame.WebGame(seed||((Math.random()*1e9)|0),"Red Dragon");
+function newGame(seed,dragonId){
+  const gameSeed=seed||((Math.random()*1e9)|0);
+  const chosenDragon=dragonId||"Red Dragon";
+  g=new DOEGame.WebGame(gameSeed,chosenDragon);
+  g.saveSeed=gameSeed;
+  g.dragonId=chosenDragon;
   g.start();
-  ui={sel:{s:null,e:null,b:null},bt:"attack",fuse:false,fuseElement:null,negateRanged:true,diverting:false,flipped:false,
-      dpicks:[],upicks:[],upSpent:0,upLevels:[],flash:null,regroup:false,
-      fsel:{sets:[{s:null,e:null,b:null},{s:null,e:null,b:null}]},previewIdx:null,justPreview:false,handPreviewOpen:false,actionPreview:null,legendOpen:false};
+  ui=defaultUI();
+  ui.startScreen=false;
+  ui.startDragon=chosenDragon;
   buildLegend();
   render();
 }
@@ -1247,17 +1550,40 @@ function encHTML(){
 }
 
 function render(){
+  const m=document.getElementById("main");
+  const topbar=document.getElementById("topbar");
+  const logTitle=document.getElementById("logTitle");
+  const lg=document.getElementById("log");
+  if(ui && ui.startScreen){
+    document.body.classList.add("start-mode");
+    document.body.classList.remove("challenge-mode");
+    if(topbar) topbar.style.display="none";
+    if(logTitle) logTitle.style.display="none";
+    if(lg){ lg.style.display="none"; lg.textContent=""; }
+    m.innerHTML = startHTML();
+    setHint();
+    return;
+  }
+  document.body.classList.remove("start-mode");
+  document.body.classList.toggle("challenge-mode", g.phase==="challenge");
+  if(topbar) topbar.style.display="flex";
+  const hideLog = g.phase==="challenge";
+  if(logTitle) logTitle.style.display=hideLog?"none":"";
+  if(lg) lg.style.display=hideLog?"none":"";
   document.getElementById("sub").textContent =
     g.phase==="gameover"?"結束":`地區 ${g.regionIdx>4?4:g.regionIdx} · ${phaseName()}`;
   document.getElementById("deckinfo").innerHTML = `牌庫 ${g.deck.length}<br>手牌 ${g.hand.length}`;
-  const m=document.getElementById("main");
-  m.innerHTML = viewFor()+previewHTML()+handPreviewHTML()+actionPreviewHTML()+legendModalHTML();
+  m.innerHTML = viewFor()+previewHTML()+handPreviewHTML()+divertModalHTML()+actionPreviewHTML()+legendModalHTML();
   // log
-  const lg=document.getElementById("log");
-  lg.textContent = g.log.slice(-40).join("\n");
-  lg.scrollTop = lg.scrollHeight;
+  if(!hideLog && lg){
+    lg.textContent = g.log.slice(-40).join("\n");
+    lg.scrollTop = lg.scrollHeight;
+  } else if(lg) {
+    lg.textContent = "";
+  }
   bindCards();
   setHint();
+  autoSave();
 }
 function phaseName(){return {challenge:"挑戰",action:"行動",penalty:"懲罰",upgrade:"升級",
   final_journey_intro:"最終旅程",final_enemy_intro:"最終敵人",gameover:"結束"}[g.phase]||g.phase;}
@@ -1337,7 +1663,7 @@ function viewFor(){
         <button class="primary" onclick="act()">面對</button>
         <button class="ghost" onclick="startDivert()" ${g.divertsLeft>0?"":"disabled"}>繞道 (${g.divertsLeft})</button>
         <button class="ghost" onclick="openHandPreview()">顯示手牌</button>
-      </div>`+(ui.diverting?`<h2>選一張手牌一起棄掉</h2>`+handHTML():"");
+      </div>`;
     case "action": {
       const enemy=g.enc.encType==="enemy";
       return encHTML()+handHTML(actionPop)+
@@ -1520,10 +1846,13 @@ function toggleLegend(){ ui.legendOpen=!ui.legendOpen; render(); }
 function closeLegend(){ ui.legendOpen=false; render(); }
 
 
-function handPreviewCardHTML(c,i){
+function handPreviewCardHTML(c,i,opts){
+  opts=opts||{};
   const cls=EL[c.cardElement];
   const L=c.level;
-  return `<div class="card ${cls}">
+  const sel=opts.sel?"sel":"";
+  const click=opts.onclick?` onclick="${opts.onclick}"`:"";
+  return `<div class="card ${cls} ${sel}"${click}>
     <div class="card-head">
       <div style="min-width:0;flex:1 1 auto">
         <div class="card-title"><span class="level-badge">L${L}</span>${ic(c.cardElement,elc(c.cardElement),20)}<span title="${c.name}">${shortName(c.name)}</span></div>
@@ -1549,6 +1878,36 @@ function handPreviewHTML(){
 }
 function openHandPreview(){ ui.handPreviewOpen=true; render(); }
 function closeHandPreview(){ ui.handPreviewOpen=false; render(); }
+
+function divertModalHTML(){
+  if(!ui.diverting) return "";
+  const picked = ui.divertPick;
+  return `<div class="preview-overlay">
+    <div class="preview-modal" onclick="event.stopPropagation()">
+      <div class="preview-head divert-head">
+        <div class="preview-title divert-title">繞道：選擇要棄掉的手牌</div>
+      </div>
+      <div class="divert-note">將棄掉目前 Key Card，並額外棄掉你選的 1 張手牌。</div>
+      <div class="divert-grid">
+        ${g.hand.map((c,i)=>handPreviewCardHTML(c,i,{sel:picked===i,onclick:`chooseDivert(${i})`})).join("")}
+      </div>
+      <div class="divert-actions">
+        <button class="ghost" onclick="cancelDivert()">取消</button>
+        <button class="primary" onclick="confirmDivert()" ${picked!=null?"":"disabled"}>確定</button>
+      </div>
+    </div>
+  </div>`;
+}
+function chooseDivert(i){ ui.divertPick=i; render(); }
+function cancelDivert(){ ui.diverting=false; ui.divertPick=null; render(); }
+function confirmDivert(){
+  if(ui.divertPick==null) return;
+  const i=ui.divertPick;
+  ui.diverting=false;
+  ui.divertPick=null;
+  g.divert(i);
+  render();
+}
 
 function previewHTML(){
   if(ui.previewIdx==null || !g.hand[ui.previewIdx]) return "";
@@ -1610,7 +1969,7 @@ function cardTap(i){
     else if(s.s===null)s.s=i; else if(s.e===null)s.e=i; else if(s.b===null)s.b=i;
     render();
   } else if(g.phase==="challenge" && ui.diverting){
-    g.divert(i); ui.diverting=false; render();
+    return;
   } else if(g.phase==="penalty"){
     const total=penTotal();
     const soaked=ui.dpicks.reduce((s,j)=>s+soakOf(j),0);
@@ -1624,7 +1983,7 @@ function cardTap(i){
   }
 }
 function act(){ ui.sel={s:null,e:null,b:null}; ui.fuse=false; ui.fuseElement=null; ui.negateRanged=true; ui.flipped=false; g.toAction(); render(); }
-function startDivert(){ ui.handPreviewOpen=false; ui.diverting=true; render(); }
+function startDivert(){ ui.handPreviewOpen=false; ui.divertPick=null; ui.diverting=true; render(); }
 function toggleFuse(){ ui.fuse=!ui.fuse; if(ui.fuse && !ui.fuseElement && ui.sel.s!=null) ui.fuseElement=curLevel(g.hand[ui.sel.s]).enhanced.element; render(); }
 function setFuseElement(e){ ui.fuseElement=e; render(); }
 function clearSel(){ ui.sel={s:null,e:null,b:null}; ui.fuse=false; ui.fuseElement=null; render(); }
@@ -1837,6 +2196,7 @@ function afterFinal(){ render(); }
 function setHint(){
   const h=document.getElementById("hint");
   if(!h) return;
+  if(ui && ui.startScreen){ h.textContent="開始新遊戲或繼續上次進度"; return; }
   const map={
     challenge:"面對遭遇，或繞道（棄關鍵卡+1手牌）",
     action:"指派卡片，其餘為預備；融合=Element卡+未指派卡同元素，並選新元素",
@@ -1849,7 +2209,11 @@ function setHint(){
   h.textContent=map[g.phase]||"";
 }
 
-try { newGame(); }
+try {
+  ui=defaultUI();
+  buildLegend();
+  render();
+}
 catch(e){
   document.getElementById('sub').textContent='發生錯誤';
   document.getElementById('main').innerHTML='<div class="banner">啟動失敗：'+(e&&e.message||e)+'</div>';
