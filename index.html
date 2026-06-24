@@ -35,6 +35,9 @@
   .rp-s{color:#22c55e;border-color:#22c55e}
   .rp-e{color:#60a5fa;border-color:#60a5fa}
   .rp-b{color:#f59e0b;border-color:#f59e0b}
+  .rp-s2{color:#22c55e;border-color:#22c55e;background:#f8fafc}
+  .rp-e2{color:#60a5fa;border-color:#60a5fa;background:#f8fafc}
+  .rp-b2{color:#f59e0b;border-color:#f59e0b;background:#f8fafc}
   .rp-dmg{color:#fca5a5;border-color:#ef4444}
   .rp-up{color:#34d399;border-color:#34d399}
   .rp-warn{color:#fca5a5;border-color:#ef4444}
@@ -81,7 +84,7 @@
   .fuse-now{font-size:13px;line-height:1.45;color:var(--txt);margin-top:6px}
   .ranged-option{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#00000024;border:1px solid #ffffff12;border-radius:12px;padding:8px 10px;margin:8px 0;font-size:13px}
   .ranged-option .left{display:flex;align-items:center;gap:6px;min-width:0}
-  .ranged-option button{flex:0 0 auto;min-height:34px;padding:6px 10px;border-radius:9px;font-size:13px}
+  .ranged-option button{flex:0 0 auto;min-height:30px;padding:6px 10px;border-radius:9px;font-size:13px}
   #log{background:#0b0e18;border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:13.5px;color:#cdd3ea;max-height:30vh;overflow:auto;white-space:pre-wrap}
   .end{text-align:center;padding:24px 10px}
   .end .big{font-size:30px;margin:8px}
@@ -177,7 +180,7 @@
   .preview-grid .stat-label{font-size:11px}
   .preview-grid .stat-value{font-size:18px}
   .preview-grid .stat-value.small{font-size:15px}
-  .preview-grid .enh-row{min-height:44px;padding:4px 6px;gap:6px}
+  .preview-grid .enh-row{min-height:44px;padding:3px 6px;gap:6px}
   .preview-grid .enh-label{font-size:10px}
   .preview-grid .enh-value{font-size:17px;white-space:normal}
   .level-note{margin-top:auto;text-align:center;font-size:12px;color:var(--muted);border-top:1px solid #ffffff16;padding-top:4px;min-height:24px}
@@ -219,7 +222,10 @@
   }
   .start-art{
     position:relative;
-    min-height:230px;
+    width:min(72vw,280px);
+    aspect-ratio:5/7;
+    align-self:center;
+    margin:6px auto 10px;
     border:1px solid #ffffff18;
     border-radius:22px;
     overflow:hidden;
@@ -310,8 +316,8 @@
     border:1px solid var(--line);
     background:#101525;
     color:var(--txt);
-    font-size:13px;
-    font-weight:850;
+    font-size:15px;
+    font-weight:900;
   }
   .dragon-choice.on{
     border-color:#facc15aa;
@@ -384,6 +390,307 @@
     margin-top:12px;
     padding-top:10px;
     border-top:1px solid #ffffff12;
+  }
+
+
+
+
+  .newgame-head{
+    justify-content:center;
+    padding:6px 2px 4px;
+    margin-bottom:4px;
+  }
+  .newgame-title{
+    width:100%;
+    text-align:center;
+    font-size:16px;
+  }
+  .newgame-dragon-art{
+    position:relative;
+    width:min(70vw,260px);
+    aspect-ratio:5/7;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin:10px auto 14px;
+    border:1px solid #ffffff18;
+    border-radius:18px;
+    overflow:hidden;
+    font-weight:900;
+    box-shadow:inset 0 1px 0 #ffffff18, 0 12px 42px #0005;
+  }
+  .newgame-dragon-art::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 50% 30%, rgba(255,255,255,.16), transparent 30%),
+      linear-gradient(180deg, transparent 0 55%, rgba(0,0,0,.30) 100%);
+  }
+  .newgame-dragon-art svg{
+    width:92px;
+    height:92px;
+    position:relative;
+    z-index:1;
+    filter:drop-shadow(0 12px 28px rgba(0,0,0,.45));
+  }
+  .newgame-dragon-name{
+    position:relative;
+    z-index:1;
+    font-size:18px;
+    letter-spacing:.02em;
+    text-shadow:0 3px 14px #000b;
+  }
+  .newgame-dragon-caption{
+    position:absolute;
+    left:12px;
+    right:12px;
+    bottom:8px;
+    z-index:1;
+    display:flex;
+    justify-content:space-between;
+    color:#dbe4ff;
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+    opacity:.9;
+  }
+
+
+  .phase-panel{
+    background:linear-gradient(90deg,#2a2f4a,#1b2030);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px 14px;
+    margin:12px 0;
+    font-size:18px;
+    line-height:1.45;
+  }
+  .phase-note{
+    color:var(--muted);
+    font-size:15px;
+    line-height:1.45;
+    margin:8px 0 10px;
+  }
+  .phase-panel.compact{
+    padding:8px 14px;
+    min-height:0;
+    line-height:1.2;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .phase-panel.compact b{
+    line-height:1;
+  }
+  .final-dragon-element svg{
+    width:24px;
+    height:24px;
+  }
+  .final-dragon-stats{
+    align-items:center;
+  }
+
+
+  .debug-boss-btn{
+    width:100%;
+    min-height:40px;
+    margin-top:-4px;
+    padding:8px 12px;
+    font-size:13px;
+    opacity:.78;
+  }
+
+
+  .boss-cover{
+    margin:10px 0 14px;
+    padding:0;
+  }
+  .boss-hero{
+    background:linear-gradient(180deg,#22283a,#141927);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:14px 14px 16px;
+    box-shadow:0 16px 36px rgba(0,0,0,.22);
+  }
+  .boss-head{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    margin-bottom:12px;
+  }
+  .boss-name{
+    font-size:27px;
+    font-weight:850;
+    letter-spacing:.01em;
+    color:var(--txt);
+    line-height:1.05;
+  }
+  .boss-stage{
+    color:var(--muted);
+    font-size:14px;
+    font-weight:700;
+    white-space:nowrap;
+    padding-bottom:2px;
+  }
+  .boss-board{
+    position:relative;
+    min-height:410px;
+    margin:0 auto 8px;
+    max-width:540px;
+  }
+  .boss-art-card{
+    position:absolute;
+    left:13%;
+    right:13%;
+    top:8px;
+    bottom:38px;
+    border-radius:18px;
+    border:1px solid var(--line);
+    background:
+      radial-gradient(circle at 50% 32%, rgba(239,68,68,.22) 0%, transparent 46%),
+      linear-gradient(180deg,#30374f 0%,#171c2b 54%,#0b0e18 100%);
+    box-shadow:0 14px 32px rgba(0,0,0,.28);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    z-index:1;
+  }
+  .boss-art-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0) 48%,rgba(0,0,0,.24));
+    pointer-events:none;
+  }
+  .boss-art-icon{
+    position:relative;
+    z-index:1;
+    opacity:.88;
+    filter:drop-shadow(0 10px 24px rgba(0,0,0,.45));
+  }
+  .boss-mp-stack,
+  .boss-hp-stack{
+    position:absolute;
+    top:54px;
+    width:26%;
+    max-width:106px;
+    min-width:88px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    z-index:3;
+  }
+  .boss-mp-stack{ left:0; }
+  .boss-hp-stack{ right:0; }
+  .boss-mp-card,
+  .boss-hp-card{
+    min-height:42px;
+    border-radius:13px;
+    border:1px solid var(--line);
+    background:linear-gradient(180deg,#1b2131f2,#101623f2);
+    box-shadow:0 8px 18px rgba(0,0,0,.22);
+    padding:6px 7px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .boss-mp-values,
+  .boss-hp-values{
+    display:flex;
+    gap:6px;
+    align-items:center;
+    justify-content:center;
+    font-size:16px;
+    font-weight:850;
+  }
+  .boss-mp-values .chip,
+  .boss-hp-values .chip{
+    font-size:15px;
+    gap:2px;
+  }
+  .boss-mp-values svg,
+  .boss-hp-values svg{
+    width:15px;
+    height:15px;
+  }
+  .boss-stat-value .chip{
+    font-size:16px;
+    gap:3px;
+  }
+  .boss-stat-value svg{
+    width:16px;
+    height:16px;
+  }
+  .boss-bottom-stats{
+    position:absolute;
+    left:18%;
+    right:18%;
+    bottom:21px;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:8px;
+    z-index:4;
+  }
+  .boss-stat-card{
+    min-height:32px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:linear-gradient(180deg,#1b2131f2,#101623f2);
+    padding:4px 6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    box-shadow:0 8px 18px rgba(0,0,0,.20);
+  }
+  .boss-stat-value{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    font-size:16px;
+    font-weight:850;
+    flex-wrap:wrap;
+  }
+  .boss-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+    margin-top:10px;
+  }
+  .boss-actions button{
+    min-height:56px;
+    padding:10px 10px;
+  }
+  .regroup-used-note{
+    color:var(--muted);
+    text-align:center;
+    margin-top:8px;
+    font-size:14px;
+  }
+
+
+  /* Final role-pop override: group 2 keeps role color, only the capsule background becomes white */
+  .rolepop.rp-s2{
+    color:#22c55e;
+    background:#f8fafc;
+    border-color:#22c55e;
+  }
+  .rolepop.rp-e2{
+    color:#60a5fa;
+    background:#f8fafc;
+    border-color:#60a5fa;
+  }
+  .rolepop.rp-b2{
+    color:#f59e0b;
+    background:#f8fafc;
+    border-color:#f59e0b;
   }
 
 </style>
@@ -982,7 +1289,10 @@ window.DOE_REAL = {"mageCards": [{"name": "Rain of Blood", "cardElement": "light
   // ---------- WebGame 狀態機 ----------
   class WebGame {
     constructor(seed, dragonId) {
-      this.rnd = mulberry32((seed >>> 0) || 1);
+      this.rndSeed = (seed >>> 0) || 1;
+      this.rndCount = 0;
+      const baseRnd = mulberry32(this.rndSeed);
+      this.rnd = () => { this.rndCount += 1; return baseRnd(); };
       this.allCards = buildMageCards();
       this.regions = buildRegions();
       this.dragon = buildDragons()[dragonId || "Red Dragon"];
@@ -1260,6 +1570,9 @@ function defaultUI(){
   return {
     startScreen:true,
     startDragon:"Red Dragon",
+    debugMode:false,
+    newGameModal:false,
+    newGameDragon:"Red Dragon",
     sel:{s:null,e:null,b:null},
     bt:"attack",
     fuse:false,
@@ -1273,6 +1586,8 @@ function defaultUI(){
     upLevels:[],
     flash:null,
     regroup:false,
+    regrouping:false,
+    regroupPick:null,
     fsel:{sets:[{s:null,e:null,b:null},{s:null,e:null,b:null}]},
     previewIdx:null,
     justPreview:false,
@@ -1287,6 +1602,10 @@ const START_DRAGONS=["Red Dragon","Yellow Dragon","Blue Dragon","Gray Dragon"];
 function dragonColor(name){
   return {"Red Dragon":elc("fire"),"Yellow Dragon":elc("lightning"),"Blue Dragon":elc("water"),"Gray Dragon":elc("shadow")}[name] || "#f8fafc";
 }
+function dragonPanelStyle(name){
+  const c=dragonColor(name);
+  return `background:radial-gradient(circle at 50% 28%, ${c}44 0%, transparent 46%), radial-gradient(circle at 24% 78%, ${c}26 0%, transparent 34%), linear-gradient(180deg,#30374f 0%,#171c2b 54%,#0b0e18 100%); border-color:${c}55;`;
+}
 function dragonShort(name){
   return String(name||"").replace(" Dragon","");
 }
@@ -1299,8 +1618,23 @@ function selectStartDragon(name){
 function hasSave(){
   try{return !!localStorage.getItem(SAVE_KEY);}catch(e){return false;}
 }
+function getSavedDragonId(){
+  try{
+    const raw=localStorage.getItem(SAVE_KEY);
+    if(!raw) return null;
+    const data=JSON.parse(raw);
+    const game=data&&data.game;
+    return game ? (game.dragonId || (game.dragon && game.dragon.name) || null) : null;
+  }catch(e){ return null; }
+}
+function syncStartDragonWithSave(){
+  if(!ui || !ui.startScreen) return null;
+  const saved=getSavedDragonId();
+  if(saved && START_DRAGONS.includes(saved)) ui.startDragon=saved;
+  return saved;
+}
 function autoSave(){
-  if(!g || !ui || ui.startScreen) return;
+  if(!g || !ui || ui.startScreen || ui.debugMode) return;
   try{
     localStorage.setItem(SAVE_KEY, JSON.stringify({
       version:1,
@@ -1320,6 +1654,7 @@ function continueGame(){
     const seed=data.game.saveSeed || 1;
     const dragonId=(data.game.dragonId || (data.game.dragon && data.game.dragon.name) || "Red Dragon");
     g=Object.assign(new DOEGame.WebGame(seed,dragonId), data.game);
+    rehydrateGameState();
     ui=defaultUI();
     ui.startScreen=false;
     buildLegend();
@@ -1329,33 +1664,76 @@ function continueGame(){
     alert("讀取存檔失敗");
   }
 }
-function startNewGame(){
-  if(hasSave() && !confirm("目前有進行中的遊戲，確定要重新開始嗎？")) return;
-  try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
-  newGame(null, ui.startDragon || "Red Dragon");
-}
+function startNewGame(){ openNewGameModal(); }
 function startHTML(){
   const canContinue=hasSave();
-  const selected=(ui&&ui.startDragon)||"Red Dragon";
-  const choices=START_DRAGONS.map(d=>`<button class="dragon-choice ${d===selected?'on':''}" onclick="selectStartDragon('${d}')">${ic("skull",dragonColor(d),15)}${dragonShort(d)}</button>`).join("");
+  const saveNote=canContinue ? "偵測到本機存檔，可繼續上次進度。" : "尚無本機存檔，請開始新遊戲。";
   return `<div class="start-screen">
     <div>
       <div class="start-title">Dragons of Etchinstone</div>
       <div class="start-subtitle">Solo Card Adventure</div>
     </div>
     <div class="start-art" aria-hidden="true">
-      <div class="start-dragon">${ic("skull",dragonColor(selected),112)}</div>
-      <div class="start-art-label"><span>${selected}</span><span>Offline Save</span></div>
+      <div class="start-dragon">${ic("skull","#f8fafc",112)}</div>
+      <div class="start-art-label"><span>Choose your dragon</span><span>Offline Save</span></div>
     </div>
-    <div class="start-dragon-options">${choices}</div>
     <div class="start-actions">
-      <button class="primary" onclick="startNewGame()">新遊戲</button>
+      <button class="primary" onclick="openNewGameModal()">新遊戲</button>
       <button class="ghost" onclick="continueGame()" ${canContinue?"":"disabled"}>繼續</button>
     </div>
-    <div class="start-save-note">${canContinue?"偵測到本機存檔，可繼續上次進度。":"尚無本機存檔，請選擇對手龍並開始新遊戲。"}</div>
+    <div class="start-save-note">${saveNote}</div>
+    <button class="ghost debug-boss-btn" onclick="debugBossBattle()">測試：進 Boss 前頁</button>
   </div>`;
 }
-
+function newGameModalHTML(){
+  if(!ui || !ui.newGameModal) return "";
+  const selected=ui.newGameDragon||"Red Dragon";
+  const choices=START_DRAGONS.map(d=>`<button class="dragon-choice ${d===selected?'on':''}" onclick="chooseNewGameDragon('${d}')">${dragonShort(d)}</button>`).join("");
+  return `<div class="preview-overlay">
+    <div class="preview-modal newgame-modal" onclick="event.stopPropagation()">
+      <div class="preview-head newgame-head">
+        <div class="preview-title newgame-title">選擇對手龍</div>
+      </div>
+      <div class="newgame-dragon-art" style="${dragonPanelStyle(selected)}">
+        ${ic("skull",dragonColor(selected),92)}
+        <div class="newgame-dragon-name">${selected}</div>
+        <div class="newgame-dragon-caption"><span>Boss Preview</span><span>${dragonShort(selected)}</span></div>
+      </div>
+      <div class="start-dragon-options">${choices}</div>
+      <div class="divert-actions">
+        <button class="ghost" onclick="cancelNewGameModal()">取消</button>
+        <button class="primary" onclick="confirmNewGame()">確定</button>
+      </div>
+    </div>
+  </div>`;
+}
+function openNewGameModal(){ ui.newGameDragon="Red Dragon"; ui.newGameModal=true; render(); }
+function chooseNewGameDragon(name){ ui.newGameDragon=name; render(); }
+function cancelNewGameModal(){ ui.newGameModal=false; render(); }
+function confirmNewGame(){
+  const chosen=ui.newGameDragon||"Red Dragon";
+  if(hasSave() && !confirm("目前有進行中的遊戲，確定要重新開始嗎？")) return;
+  try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
+  ui.newGameModal=false;
+  newGame(null, chosen);
+}
+function debugBossBattle(){
+  const seed=((Math.random()*1e9)|0);
+  g=new DOEGame.WebGame(seed,"Red Dragon");
+  g.saveSeed=seed;
+  g.dragonId="Red Dragon";
+  g.start();
+  if(typeof g._startFinal==="function") g._startFinal();
+  g.phase="final_journey_intro";
+  g.enc=null;
+  g.tx=null;
+  ui=defaultUI();
+  ui.startScreen=false;
+  ui.debugMode=true;
+  resetFinalSel();
+  buildLegend();
+  render();
+}
 
 function normEffect(e){ return (e && e !== "none") ? e : null; }
 function effectMeta(e){
@@ -1516,13 +1894,93 @@ function handHTML(popOf,selOf){
 function encBaseName(name){
   return String(name||"").replace(/\s*#\d+\s*$/,"");
 }
+function armorKey(t){
+  const armors=(t&&t.armor&&t.armor.length)?t.armor:(t&&t.armorValue?[{value:t.armorValue,element:t.armorElement}]:[]);
+  return armors.map(a=>`${a.value||0}:${a.element||""}`).join("|");
+}
+function encTargetSame(a,b){
+  if(a===b) return true;
+  if(!a||!b) return false;
+  if(a.name && b.name && a.name===b.name) return true;
+  const keys=["hp","initiative","attack","attackElement","xp","ability","mp","mpElement","timePenalty","peril"];
+  return keys.every(k=>(a[k]??null)===(b[k]??null)) && armorKey(a)===armorKey(b);
+}
+function encTargetIndex(list,target){
+  if(!list||!target) return -1;
+  const direct=list.indexOf(target);
+  if(direct>=0) return direct;
+  return list.findIndex(x=>encTargetSame(x,target));
+}
+function repairEncounterReference(){
+  if(!g||!g.enc||!g.regions||!g.regions[g.regionIdx]) return;
+  const reg=g.regions[g.regionIdx];
+  const list=g.enc.encType==="enemy"?reg.enemies:reg.journeys;
+  const idx=encTargetIndex(list,g.enc.target);
+  if(idx>=0) g.enc.target=list[idx];
+}
+function makeRestoreRng(seed,count){
+  let a = (seed >>> 0) || 1;
+  function nextRaw(){
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+  for(let i=0;i<(count||0);i++) nextRaw();
+  return nextRaw;
+}
+function rehydrateGameState(){
+  if(!g) return;
+  const seed=(g.rndSeed || g.saveSeed || 1) >>> 0;
+  const count=Number(g.rndCount||0);
+  const raw=makeRestoreRng(seed,count);
+  g.rndSeed=seed;
+  g.rndCount=count;
+  g.rnd=()=>{ g.rndCount+=1; return raw(); };
+
+  const dragonId=g.dragonId || (g.dragon&&g.dragon.name) || "Red Dragon";
+  const dragons=DOEData.buildDragons();
+  g.dragon=Object.assign(dragons[dragonId] || dragons["Red Dragon"], g.dragon||{});
+  g.dragonId=g.dragon.name;
+
+  if(!Array.isArray(g.allCards) || !g.allCards.length) g.allCards=DOEData.buildMageCards();
+  const cardMap=new Map();
+  g.allCards.forEach(c=>{ if(c&&c.name) cardMap.set(c.name,c); });
+  function cardRef(c){
+    if(!c || !c.name) return c;
+    const ref=cardMap.get(c.name);
+    if(!ref) return c;
+    if(c.level!=null) ref.level=c.level;
+    if(c._downgradedThisEncounter) ref._downgradedThisEncounter=c._downgradedThisEncounter;
+    else delete ref._downgradedThisEncounter;
+    return ref;
+  }
+  ["deck","hand","discard"].forEach(zone=>{
+    g[zone]=(Array.isArray(g[zone])?g[zone]:[]).map(cardRef);
+  });
+  if(g.enc){
+    g.enc.key=cardRef(g.enc.key);
+    repairEncounterReference();
+  }
+  if(g.tx){
+    if(Array.isArray(g.tx.roleCards)) g.tx.roleCards=g.tx.roleCards.map(cardRef);
+    g.tx.reserveCard=cardRef(g.tx.reserveCard);
+    g.tx.fusedBottom=cardRef(g.tx.fusedBottom);
+    if(g.tx.set){
+      g.tx.set.spell=cardRef(g.tx.set.spell);
+      g.tx.set.element=cardRef(g.tx.set.element);
+      g.tx.set.boost=cardRef(g.tx.set.boost);
+    }
+  }
+}
 function encHTML(){
   const e=g.enc, t=e.target;
   const reg=g.regions && g.regions[g.regionIdx];
   if(e.encType==="enemy"){
     const armors=(t.armor && t.armor.length)?t.armor:(t.armorValue?[{value:t.armorValue,element:t.armorElement}]:[]);
     const armorHTML=armors.map(a=>chip("shield",a.element?elc(a.element):"#cbd5e1",a.value)).join("");
-    const enemyNo=reg && reg.enemies ? (reg.enemies.indexOf(t)+1) : "";
+    const enemyIdx=reg && reg.enemies ? encTargetIndex(reg.enemies,t) : -1;
+    const enemyNo=enemyIdx>=0 ? (enemyIdx+1) : "";
     const fxHTML=(t.ability||e.hardships.length) ? `${t.ability?effectChip(t.ability,{short:true}):""}${effectsHTML(e.hardships,{short:true})}` : "";
     return `<div class="enc">
       <div class="enc-mini-title">${ic("skull","#ffffff",15)}<span>Enemy : ${encBaseName(t.name)} ${enemyNo?`#${enemyNo}`:""}</span></div>
@@ -1536,7 +1994,8 @@ function encHTML(){
       </div>
     </div>`;
   }
-  const journeyNo=reg && reg.journeys ? (reg.journeys.indexOf(t)+1) : "";
+  const journeyIdx=reg && reg.journeys ? encTargetIndex(reg.journeys,t) : -1;
+  const journeyNo=journeyIdx>=0 ? (journeyIdx+1) : "";
   const fxHTML=(t.peril||e.hardships.length) ? `${t.peril?effectChip(t.peril,{short:true}):""}${effectsHTML(e.hardships,{short:true})}` : "";
   return `<div class="enc">
     <div class="enc-mini-title">${ic("mountain","#ffffff",15)}<span>Journey : ${encBaseName(t.name)} ${journeyNo?`#${journeyNo}`:""}</span></div>
@@ -1560,7 +2019,7 @@ function render(){
     if(topbar) topbar.style.display="none";
     if(logTitle) logTitle.style.display="none";
     if(lg){ lg.style.display="none"; lg.textContent=""; }
-    m.innerHTML = startHTML();
+    m.innerHTML = startHTML()+newGameModalHTML();
     setHint();
     return;
   }
@@ -1573,7 +2032,7 @@ function render(){
   document.getElementById("sub").textContent =
     g.phase==="gameover"?"結束":`地區 ${g.regionIdx>4?4:g.regionIdx} · ${phaseName()}`;
   document.getElementById("deckinfo").innerHTML = `牌庫 ${g.deck.length}<br>手牌 ${g.hand.length}`;
-  m.innerHTML = viewFor()+previewHTML()+handPreviewHTML()+divertModalHTML()+actionPreviewHTML()+legendModalHTML();
+  m.innerHTML = viewFor()+previewHTML()+handPreviewHTML()+divertModalHTML()+regroupModalHTML()+newGameModalHTML()+actionPreviewHTML()+legendModalHTML();
   // log
   if(!hideLog && lg){
     lg.textContent = g.log.slice(-40).join("\n");
@@ -1586,7 +2045,7 @@ function render(){
   autoSave();
 }
 function phaseName(){return {challenge:"挑戰",action:"行動",penalty:"懲罰",upgrade:"升級",
-  final_journey_intro:"最終旅程",final_enemy_intro:"最終敵人",gameover:"結束"}[g.phase]||g.phase;}
+  final_journey_intro:"Boss",final_journey:"最終旅程",final_enemy_intro:"最終敵人",gameover:"結束"}[g.phase]||g.phase;}
 
 
 function rbPill(icon,color,value,extraCls){
@@ -1643,16 +2102,18 @@ function regionJourneyTile(t,i,active){
 function regionBoardHTML(){
   if(!g.enc || !g.regions || !g.regions[g.regionIdx]) return encHTML();
   const reg=g.regions[g.regionIdx];
+  const enemyActiveIdx=g.enc.encType==="enemy"?encTargetIndex(reg.enemies,g.enc.target):-1;
+  const journeyActiveIdx=g.enc.encType==="journey"?encTargetIndex(reg.journeys,g.enc.target):-1;
   return `<div class="region-board">
     <div class="rb-title">
       <div class="rb-title-main">${reg.name}</div>
       <div class="rb-title-sub">Region ${g.regionIdx}</div>
     </div>
     <div class="rb-enemies">
-      ${reg.enemies.map((t,i)=>regionEnemyTile(t,i,g.enc.encType==="enemy" && g.enc.target===t)).join("")}
+      ${reg.enemies.map((t,i)=>regionEnemyTile(t,i,i===enemyActiveIdx)).join("")}
     </div>
     <div class="rb-journeys">
-      ${reg.journeys.map((t,i)=>regionJourneyTile(t,i,g.enc.encType==="journey" && g.enc.target===t)).join("")}
+      ${reg.journeys.map((t,i)=>regionJourneyTile(t,i,i===journeyActiveIdx)).join("")}
     </div>
   </div>`;
 }
@@ -1687,7 +2148,8 @@ function viewFor(){
     }
     case "penalty": return penaltyView();
     case "upgrade": return upgradeView();
-    case "final_journey_intro": return finalView("journey");
+    case "final_journey_intro": return bossCoverView();
+    case "final_journey": return finalView("journey");
     case "final_enemy_intro": return finalView("enemy");
     case "gameover":
       return `<div class="end"><div class="big">${g.result.win?"🏆 勝利！":"💀 失敗"}</div>
@@ -1731,16 +2193,20 @@ function penTotal(){const r=g.tx.r,tp=r.timePenalty;
 function penaltyPop(i){return ui.dpicks.includes(i)?{text:"−"+soakOf(i),cls:"rp-dmg"}:null;}
 function penaltyView(){
   const r=g.tx.r,total=penTotal();
-  const head=`<div class="banner">結算：<b>${r.outcome}</b>　XP ${r.xp}　時間懲罰 ${r.timePenalty}　傷害 ${g.tx.dmg}</div>`;
-  if(total<=0) return head+`<div class="muted">${r.timePenalty?`時間懲罰：從牌庫棄 ${Math.min(r.timePenalty,g.deck.length)} 張。`:''}沒有傷害需要吸收。</div>
-    <div class="btns"><button class="primary" onclick="doPenaltyAuto()">繼續</button></div>`;
+  const head=`<div class="phase-panel">結算：<b>${r.outcome}</b>　XP ${r.xp}　時間懲罰 ${r.timePenalty}　傷害 ${g.tx.dmg}</div>`;
+  if(total<=0){
+    const timeText=r.timePenalty?`時間懲罰：從牌庫棄 ${Math.min(r.timePenalty,g.deck.length)} 張。`:"";
+    const xpText=r.xp<=0?"沒有 XP，將直接清理。":"沒有傷害需要吸收。";
+    return head+`<div class="phase-note">${timeText}${xpText}</div>
+      <div class="btns"><button class="primary" onclick="doPenaltyAuto()">繼續</button></div>`;
+  }
   const soaked=ui.dpicks.reduce((s,i)=>s+soakOf(i),0);
   const remaining=Math.max(0,total-soaked);
   const noMore=g.hand.every((_,i)=>ui.dpicks.includes(i));
   const can=remaining<=0||noMore;
-  const elIco=g.tx.atkEl?ic(g.tx.atkEl,elc(g.tx.atkEl),18):'';
-  return head+`<div class="banner">${elIco} 還需吸收 <b style="font-size:1.5em;color:#fca5a5">${remaining}</b> <span class="muted">／ 共 ${total}</span></div>
-    <div class="muted">點手牌降級吸收（盾值；元素相符雙倍）。歸 0 後不能再選；吸不完則被擊倒。</div>
+  const elIco=g.tx.atkEl?ic(g.tx.atkEl,elc(g.tx.atkEl),22):'';
+  return head+`<div class="phase-panel compact">${elIco} 還需吸收 <span>${remaining} / ${total}</span></div>
+    <div class="phase-note">護盾元素相符雙倍；吸收不完會被擊倒。</div>
     ${handHTML(penaltyPop)}
     <div class="btns">
       ${flipBtn()}
@@ -1756,11 +2222,11 @@ function upgradePop(i){
 }
 function upgradeView(){
   const xp=g.tx.r.xp;
-  if(xp<=0) return `<div class="banner">沒有 XP，直接清理。</div>
+  if(xp<=0) return `<div class="phase-panel">沒有 XP，直接清理。</div>
     <div class="btns"><button class="primary" onclick="finishUpgrade([])">繼續</button></div>`;
   const remaining=xp-ui.upSpent;
-  return `<div class="banner">升級階段：可用 XP <b>${remaining}</b> / ${xp}</div>
-    <div class="muted">點手牌升級（扣 XP；本遭遇被降級的卡不能立刻升級）。已升 ${ui.upicks.length} 次</div>
+  return `<div class="phase-panel">升級階段：可用 XP <b>${remaining}</b> / <b>${xp}</b></div>
+    <div class="phase-note">本遭遇被降級的卡不能立刻升級。</div>
     ${handHTML(upgradePop)}
     <div class="btns">
       ${flipBtn()}
@@ -1769,22 +2235,102 @@ function upgradeView(){
       <button class="primary" onclick="finishUpgrade(ui.upicks)">完成升級</button>
     </div>`;
 }
-// ---- #3 龍戰：手動兩組 ----
+// ---- #3 龍戰：Boss 封面頁 + 手動兩組 ----
+function bossCoverView(){
+  const d=g.dragon;
+  const mp=d.mpTiers.map((t,i)=>`<div class="boss-mp-card">
+      <div class="boss-mp-values">${chip("mountain",elc(t[1]),t[0])}${chip("hourglass","#cbd5e1",t[2])}</div>
+    </div>`).join("");
+  const hp=d.hpTiers.map((t,i)=>`<div class="boss-hp-card">
+      <div class="boss-hp-values">${chip("heart","#fca5a5",t[0])}${chip("sword",elc(t[1].element),t[1].value)}</div>
+    </div>`).join("");
+  const arm=d.armor.map(a=>chip("shield",elc(a.element),a.value)).join("");
+  return `<div class="boss-cover">
+    <div class="boss-hero">
+      <div class="boss-head">
+        <div class="boss-name">${d.name}</div>
+      </div>
+      <div class="boss-board">
+        <div class="boss-art-card" style="${dragonPanelStyle(d.name)}">
+          <div class="boss-art-icon">${ic("skull",dragonColor(d.name),108)}</div>
+        </div>
+        <div class="boss-mp-stack">${mp}</div>
+        <div class="boss-hp-stack">${hp}</div>
+        <div class="boss-bottom-stats">
+          <div class="boss-stat-card">
+            <div class="boss-stat-value">${chip("init","#cbd5e1",d.initiative)}</div>
+          </div>
+          <div class="boss-stat-card">
+            <div class="boss-stat-value">${chip("sword",elc(d.earlyDamage.element),d.earlyDamage.value)}</div>
+          </div>
+          <div class="boss-stat-card">
+            <div class="boss-stat-value">${arm}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="boss-actions">
+      <button class="ghost" onclick="startRegroup()" ${g.regroupUsed?"disabled":""}>Regroup</button>
+      <button class="primary" onclick="startFinalJourney()">開始</button>
+      <button class="ghost" onclick="openHandPreview()">檢視手牌</button>
+    </div>
+    ${g.regroupUsed?`<div class="regroup-used-note">Regroup 已使用</div>`:""}
+  </div>`;
+}
+function regroupModalHTML(){
+  if(!ui.regrouping) return "";
+  const picked=ui.regroupPick;
+  return `<div class="preview-overlay">
+    <div class="preview-modal" onclick="event.stopPropagation()">
+      <div class="preview-head divert-head">
+        <div class="preview-title divert-title">Regroup：選 1 張棄掉</div>
+      </div>
+      <div class="divert-note">棄掉選中的 1 張，剩餘手牌洗回後重新抽 7 張。</div>
+      <div class="divert-grid">
+        ${g.hand.map((c,i)=>handPreviewCardHTML(c,i,{sel:picked===i,onclick:`chooseRegroup(${i})`})).join("")}
+      </div>
+      <div class="divert-actions">
+        <button class="ghost" onclick="cancelRegroup()">取消</button>
+        <button class="primary" onclick="confirmRegroup()" ${picked!=null?"":"disabled"}>確定</button>
+      </div>
+    </div>
+  </div>`;
+}
 function finalSlotOf(i){const S=ui.fsel.sets;
-  for(let k=0;k<2;k++){if(S[k].s===i)return[k,"法"];if(S[k].e===i)return[k,"元"];if(S[k].b===i)return[k,"B"];}
+  for(let k=0;k<2;k++){
+    const suf=k===1?"2":"";
+    if(S[k].s===i)return{set:k+1,role:"Spell",cls:"rp-s"+suf};
+    if(S[k].e===i)return{set:k+1,role:"Element",cls:"rp-e"+suf};
+    if(S[k].b===i)return{set:k+1,role:"Boost",cls:"rp-b"+suf};
+  }
   return null;}
 function finalPop(i){const r=finalSlotOf(i);if(!r)return null;
-  return {text:"組"+(r[0]+1)+"·"+r[1],cls:r[0]===0?"rp-s":"rp-e"};}
+  return {text:`${r.role} ${r.set}`,cls:r.cls};}
+function finalPhaseHeaderHTML(kind){
+  const d=g.dragon;
+  const init=chip("init","#cbd5e1",d.initiative);
+  const early=chip("sword",elc(d.earlyDamage.element),d.earlyDamage.value);
+  const arm=d.armor.map(a=>chip("shield",elc(a.element),a.value)).join("");
+  if(kind==="journey"){
+    const tiers=d.mpTiers.map(t=>`<span class="tier">${chip("mountain",elc(t[1]),t[0])}${chip("hourglass","#cbd5e1",t[2])}</span>`).join("");
+    return `<div class="enc"><div class="enc-mini-title">${ic("mountain","#ffffff",15)}<span>Final Journey</span></div>
+      <div class="chips big">${tiers}</div>
+      <div class="chips big" style="margin-top:8px">${init}${early}${arm}</div></div>`;
+  }
+  const tiers=d.hpTiers.map(t=>`<span class="tier">${chip("heart","#fca5a5",t[0])}${chip("sword",elc(t[1].element),t[1].value)}</span>`).join("");
+  return `<div class="enc"><div class="enc-mini-title">${ic("skull","#ffffff",15)}<span>Final Enemy</span></div>
+    <div class="chips big">${tiers}</div>
+    <div class="chips big" style="margin-top:8px">${init}${early}${arm}</div></div>`;
+}
 function finalView(kind){
   const isJ=kind==="journey";
   const ready=ui.fsel.sets.some(s=>s.s!=null);
-  if(ui.regroup) return dragonHTML()+`<h2>選一張棄掉並重抽 7 張</h2>`+handHTML();
-  return dragonHTML()
-    +`<h2>${isJ?"最終旅程：組兩組行動（求移動）":"最終敵人：組兩組行動（求攻擊）"}</h2>`
-    +`<div class="muted">點卡片循環指派：組1法→組1元→組1B→組2法→組2元→組2B→取消</div>`
+  if(ui.regroup) return finalPhaseHeaderHTML(kind)+`<h2>選一張棄掉並重抽 7 張</h2>`+handHTML();
+  const phaseNote="點卡片循環指派兩組行動";
+  return finalPhaseHeaderHTML(kind)
+    +`<div class="phase-note">${phaseNote}</div>`
     +handHTML(finalPop)
     +`<div class="btns">
-        ${(isJ&&!g.regroupUsed)?`<button class="warn" onclick="startRegroup()">Regroup</button>`:""}
         ${flipBtn()}
         <button class="ghost" onclick="suggestFinal('${kind}')">建議</button>
         <button class="ghost" onclick="clearFinal()">清除</button>
@@ -1812,8 +2358,8 @@ function dragonHTML(){
   const mp=d.mpTiers.map(t=>`<span class="tier">${chip("mountain",elc(t[1]),t[0])}${chip("hourglass","#cbd5e1",t[2])}</span>`).join("");
   const hp=d.hpTiers.map(t=>`<span class="tier">${chip("heart","#fca5a5",t[0])}${chip("sword",elc(t[1].element),t[1].value)}</span>`).join("");
   return `<div class="enc"><div class="nm">🐲 ${d.name}</div>
-    <div class="chips big">${chip("init","#cbd5e1",d.initiative)}
-      ${chip("boost","#fca5a5",d.earlyDamage.value)}${ic(d.earlyDamage.element,elc(d.earlyDamage.element),14)}
+    <div class="chips big final-dragon-stats">${chip("init","#cbd5e1",d.initiative)}
+      ${chip("boost","#fca5a5",d.earlyDamage.value)}<span class="final-dragon-element">${ic(d.earlyDamage.element,elc(d.earlyDamage.element),24)}</span>
       ${arm}</div>
     <div class="muted" style="margin-top:4px">最終旅程 MP</div><div class="chips">${mp}</div>
     <div class="muted" style="margin-top:4px">最終敵人 HP</div><div class="chips">${hp}</div></div>`;
@@ -1977,8 +2523,7 @@ function cardTap(i){
     render();
   } else if(g.phase==="upgrade"){
     tryUpgrade(i);
-  } else if(g.phase==="final_journey_intro"||g.phase==="final_enemy_intro"){
-    if(ui.regroup){ ui.regroup=false; g.regroup(i); resetFinalSel(); afterFinal(); return; }
+  } else if(g.phase==="final_journey"||g.phase==="final_enemy_intro"){
     cycleFinal(i); render();
   }
 }
@@ -2135,8 +2680,14 @@ function executeActionPreview(){
 function confirmAction(){ openActionPreview(); }
 // 懲罰
 function initUpgrade(){ ui.upicks=[]; ui.upSpent=0; ui.upLevels=g.hand.map(c=>c.level); ui.flipped=false; }
-function doPenaltyAuto(){ g.applyPenalty(null); initUpgrade(); render(); }
-function doPenaltyConfirm(){ g.applyPenalty(ui.dpicks); initUpgrade(); render(); }
+function finishPenalty(order){
+  g.applyPenalty(order);
+  initUpgrade();
+  if(g.tx && g.tx.r && g.tx.r.xp<=0){ finishUpgrade([]); return; }
+  render();
+}
+function doPenaltyAuto(){ finishPenalty(null); }
+function doPenaltyConfirm(){ finishPenalty(ui.dpicks); }
 // 升級
 function flash(idx,text,cls){ ui.flash={idx,text,cls}; render();
   setTimeout(()=>{ if(ui.flash&&ui.flash.idx===idx){ ui.flash=null; render(); } },1000); }
@@ -2169,7 +2720,25 @@ function suggestFinal(kind){
 function clearFinal(){ resetFinalSel(); render(); }
 function setFinalFuse(k){ if(!ui.fsel) resetFinalSel(); ui.fsel.fuseSet=k; if(k!=null && !ui.fsel.fuseElement){ const st=ui.fsel.sets[k]; if(st&&st.s!=null) ui.fsel.fuseElement=curLevel(g.hand[st.s]).enhanced.element; } render(); }
 function setFinalFuseElement(e){ if(!ui.fsel) resetFinalSel(); ui.fsel.fuseElement=e; render(); }
-function startRegroup(){ ui.regroup=true; render(); }
+function startRegroup(){ ui.regroupPick=null; ui.regrouping=true; render(); }
+function chooseRegroup(i){ ui.regroupPick=i; render(); }
+function cancelRegroup(){ ui.regrouping=false; ui.regroupPick=null; render(); }
+function confirmRegroup(){
+  if(ui.regroupPick==null) return;
+  g.regroup(ui.regroupPick);
+  ui.regrouping=false;
+  ui.regroupPick=null;
+  resetFinalSel();
+  render();
+}
+function startFinalJourney(){
+  ui.regrouping=false;
+  ui.regroupPick=null;
+  ui.handPreviewOpen=false;
+  resetFinalSel();
+  g.phase="final_journey";
+  render();
+}
 function confirmFinal(kind){
   const t=kind==="journey"?"move":"attack";
   const allSets=ui.fsel.sets;
@@ -2197,12 +2766,14 @@ function setHint(){
   const h=document.getElementById("hint");
   if(!h) return;
   if(ui && ui.startScreen){ h.textContent="開始新遊戲或繼續上次進度"; return; }
+  if(ui && ui.debugMode){ h.textContent="Boss 前頁 UI 測試模式，不會覆蓋存檔"; return; }
   const map={
     challenge:"面對遭遇，或繞道（棄關鍵卡+1手牌）",
     action:"指派卡片，其餘為預備；融合=Element卡+未指派卡同元素，並選新元素",
     penalty:"點手牌降級吸收傷害（剩餘歸0），或自動吸收",
     upgrade:"點手牌升級（扣XP，不夠會提示）；或用建議",
-    final_journey_intro:"循環點卡指派兩組行動（求移動），可先 Regroup",
+    final_journey_intro:"Boss 封面頁：可 Regroup、檢視手牌，或開始 Final Journey",
+    final_journey:"循環點卡指派兩組行動（求移動）",
     final_enemy_intro:"循環點卡指派兩組行動（求攻擊），對龍最後一擊",
     gameover:"看看分數，再玩一局！",
   };
